@@ -54,10 +54,7 @@ async function createScenario (req: NextApiRequest, res: NextApiResponse) {
     })
 
     res.send({
-      scenario: {
-        id: workflow.id,
-        slug: workflow.slug
-      }
+      scenario: workflow
     })
   } catch (e) {
     console.error('ERROR:', e)

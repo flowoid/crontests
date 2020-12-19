@@ -105,18 +105,20 @@ export const FlowoidService = {
             node {
               id
               name
-              slug
               state
             }
           }
         }
       }
     `
-    return await FlowoidService.requestQuery(query, {
+    const res = await FlowoidService.requestQuery(query, {
       filter: {
-        project: projectId
+        project: {
+          eq: projectId
+        }
       }
     })
+    return res.workflows.edges.map(edge => edge.node)
   },
 
   async createWorkflow (projectId: string, name: string) {
@@ -124,7 +126,8 @@ export const FlowoidService = {
       mutation ($input: CreateOneWorkflowInput!) {
         createOneWorkflow (input: $input) {
           id
-          slug
+          name
+          state
         }
       }
     `
