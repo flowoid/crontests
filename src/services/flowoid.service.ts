@@ -121,6 +121,29 @@ export const FlowoidService = {
     return res.workflows.edges.map(edge => edge.node)
   },
 
+  async getWorkflowById (id: string) {
+    const query = gql`
+      query ($id: ID!) {
+        workflow (id: $id) {
+          id
+          slug
+          name
+          state
+          actions {
+            edges {
+              node {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(query, { id })
+    return res.workflow
+  },
+
   async createWorkflow (projectId: string, name: string) {
     const mutation = gql`
       mutation ($input: CreateOneWorkflowInput!) {
