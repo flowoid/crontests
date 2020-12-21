@@ -134,6 +134,15 @@ export const FlowoidService = {
               node {
                 id
                 name
+                inputs
+                integrationAction {
+                  id
+                  key
+                  integration {
+                    id
+                    logo
+                  }
+                }
               }
             }
           }

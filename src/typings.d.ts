@@ -8,4 +8,13 @@ export interface Scenario {
 export interface ScenarioAction {
   id: string
   name: string
+  inputs: Record<string, any>
+  integrationAction: {
+    id: string
+    key: string
+    integration: {
+      id: string
+      logo: string
+    }
+  }
 }
