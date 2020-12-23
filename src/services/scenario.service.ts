@@ -1,28 +1,45 @@
-import fetch from 'isomorphic-unfetch'
+import axios from 'axios'
 import { NextApiRequest } from 'next'
 import { Scenario } from '../typings'
 
 export const ScenarioService = {
   async listScenarios (req?: NextApiRequest): Promise<Scenario[]> {
-    const res = await fetch('http://localhost:3000/api/v1/scenarios', {
+    const res = await axios.get('http://localhost:3000/api/v1/scenarios', {
       headers: {
         cookie: req?.headers?.cookie
       }
     })
     if (res.status < 400) {
-      return (await res.json())?.scenarios
+      return res.data.scenarios
     }
     throw new Error() // TODO
   },
 
   async getScenarioById (id: string, req?: NextApiRequest): Promise<Scenario | null> {
-    const res = await fetch(`http://localhost:3000/api/v1/scenarios/${id}`, {
+    const res = await axios.get(`http://localhost:3000/api/v1/scenarios/${id}`, {
       headers: {
         cookie: req?.headers?.cookie
       }
     })
     if (res.status < 400) {
-      return (await res.json()).scenario
+      return res.data.scenario
+    }
+    if (res.status === 404) {
+      return null
+    }
+    throw new Error() // TODO
+  },
+
+  async patchScenario (id: string, data: Partial<Scenario>, req?: NextApiRequest): Promise<Scenario | null> {
+    const res = await axios.patch(`http://localhost:3000/api/v1/scenarios/${id}`, {
+      method: 'PATCH',
+      headers: {
+        cookie: req?.headers?.cookie
+      },
+      data
+    })
+    if (res.status < 400) {
+      return res.data.scenario
     }
     if (res.status === 404) {
       return null

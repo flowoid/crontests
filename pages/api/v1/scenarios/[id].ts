@@ -8,6 +8,8 @@ export default function (req: NextApiRequest, res: NextApiResponse): Promise<voi
   switch (req.method) {
     case 'GET':
       return getScenarioById(req, res)
+    case 'PATCH':
+      return updateScenario(req, res)
   }
 }
 
@@ -32,12 +34,39 @@ async function getScenarioById (req: NextApiRequest, res: NextApiResponse): Prom
   }
 }
 
+async function updateScenario (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  const username = await getAuthUsername(req)
+  if (!username) {
+    return res.status(401).send({ error: 'Unauthorized' })
+  }
+  const scenarioId = getQueryParam(req, 'id').toLowerCase()
+  const scenario = await fetchScenario(scenarioId, username)
+  const data: Partial<Scenario> = req.body.data
+
+  if (data.schedule) {
+    if (!scenario.schedule) {
+      const scheduleIntegration = await FlowoidService.getIntegrationByKey('schedule')
+      const scheduleTrigger = await FlowoidService.getIntegrationTriggersByKey(scheduleIntegration.id, 'schedule')
+      await FlowoidService.createWorkflowTrigger(scenario.id, scheduleTrigger.id, data.schedule)
+    } else {
+      // TODO update workflow trigger
+    }
+  }
+
+  res.send({})
+}
+
 async function fetchScenario (scenarioId: string, username: string): Promise<Scenario | null> {
   const workflow = await FlowoidService.getWorkflowById(scenarioId)
   if (workflow && workflow.slug.split('/')[1] === `user_${username}`) {
-    delete workflow.slug
-    workflow.actions = workflow.actions.edges.map(action => action.node)
-    return workflow
+    const scenario: Scenario = {
+      id: workflow.id,
+      name: workflow.name,
+      state: workflow.state,
+      actions: workflow.actions.edges.map(action => action.node),
+      schedule: workflow.trigger
+    }
+    return scenario
   } else {
     return null
   }

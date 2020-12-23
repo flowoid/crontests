@@ -25,6 +25,33 @@ export const FlowoidService = {
     return null
   },
 
+  async listIntegrationTriggers (filter: Record<string, any>) {
+    const query = gql`
+      query ($filter: IntegrationTriggerFilter) {
+        integrationTriggers (filter: $filter) {
+          edges {
+            node {
+              id
+            }
+          }
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(query, { filter })
+    return res.integrationTriggers.edges.map(edge => edge.node)
+  },
+
+  async getIntegrationTriggersByKey (integrationId: string, key: string) {
+    const integrationTriggers = await FlowoidService.listIntegrationTriggers({
+      integration: { eq: integrationId },
+      key: { eq: key }
+    })
+    if (integrationTriggers.length === 1) {
+      return integrationTriggers[0]
+    }
+    return null
+  },
+
   async listIntegrationActions (filter: Record<string, any>) {
     const query = gql`
       query ($filter: IntegrationActionFilter) {
@@ -129,6 +156,11 @@ export const FlowoidService = {
           slug
           name
           state
+          trigger {
+            id
+            name
+            schedule
+          }
           actions {
             edges {
               node {
@@ -172,6 +204,26 @@ export const FlowoidService = {
       }
     })
     return res.createOneWorkflow
+  },
+
+  async createWorkflowTrigger (workflowId: string, integrationTriggerId: string, inputs: Record<string, any>) {
+    const mutation = gql`
+      mutation ($input: CreateOneWorkflowTriggerInput!) {
+        createOneWorkflowTrigger (input: $input) {
+          id
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(mutation, {
+      input: {
+        workflowTrigger: {
+          workflow: workflowId,
+          integrationTrigger: integrationTriggerId,
+          inputs
+        }
+      }
+    })
+    return res.createOneWorkflowTrigger
   },
 
   async createWorkflowAction (workflowId: string, integrationActionId: string, inputs: Record<string, any>) {

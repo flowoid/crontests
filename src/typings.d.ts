@@ -3,6 +3,7 @@ export interface Scenario {
   name: string
   state: string | null
   actions?: ScenarioAction[]
+  schedule?: any
 }
 
 export interface ScenarioAction {

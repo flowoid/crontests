@@ -1,9 +1,10 @@
 import { GetServerSidePropsResult } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import { PageWrapper } from '../../components/common/PageLayout/PageWrapper'
 import { ListScenarioActions } from '../../components/scenario-actions/ListScenarioActions'
+import { ScenarioFrequency } from '../../components/scenarios/ScenarioFrequency'
 import { ScenarioService } from '../../src/services/scenario.service'
 import { Scenario } from '../../src/typings'
 import { getQueryParam } from '../../src/utils/next.utils'
@@ -16,11 +17,17 @@ interface Props {
 }
 
 function ScenarioPage (props: Props) {
-  const { scenario, error } = props
+  const { error } = props
+  const [scenario, setScenario] = useState(props.scenario)
   const router = useRouter()
 
   if (!scenario || error) {
     return <>Unexpected error</> // TODO
+  }
+
+  const handleScenarioUpdate = async () => {
+    const updatedScenario = await ScenarioService.getScenarioById(scenario.id)
+    setScenario(updatedScenario)
   }
 
   const handleGoBack = async () => {
@@ -36,6 +43,11 @@ function ScenarioPage (props: Props) {
       <PageWrapper title={scenario.name}
                   //  extra={renderHeaderExtra()}
                    onBack={handleGoBack}>
+
+        <div style={{ marginBottom: 16 }}>
+          <ScenarioFrequency scenario={scenario} onFrequencyUpdate={handleScenarioUpdate}/>
+        </div>
+
         <ListScenarioActions scenarioActions={scenario.actions ?? []}/>
       </PageWrapper>
     </>
