@@ -53,6 +53,10 @@ async function updateScenario (req: NextApiRequest, res: NextApiResponse): Promi
     }
   }
 
+  if (data.enabled !== undefined) {
+    await FlowoidService.updateWorkflowTrigger(scenario.schedule.id, { enabled: data.enabled })
+  }
+
   res.send({})
 }
 
@@ -63,6 +67,7 @@ async function fetchScenario (scenarioId: string, username: string): Promise<Sce
       id: workflow.id,
       name: workflow.name,
       state: workflow.state,
+      enabled: workflow.trigger.enabled ?? false,
       actions: workflow.actions.edges.map(action => action.node),
       schedule: workflow.trigger
         ? {

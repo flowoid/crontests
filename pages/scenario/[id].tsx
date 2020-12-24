@@ -1,3 +1,4 @@
+import { Switch } from 'antd'
 import { GetServerSidePropsResult } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -19,6 +20,7 @@ interface Props {
 function ScenarioPage (props: Props) {
   const { error } = props
   const [scenario, setScenario] = useState(props.scenario)
+  const [changingScenarioEnable, setChangingScenarioEnable] = useState(false)
   const router = useRouter()
 
   if (!scenario || error) {
@@ -28,6 +30,34 @@ function ScenarioPage (props: Props) {
   const handleScenarioUpdate = async () => {
     const updatedScenario = await ScenarioService.getScenarioById(scenario.id)
     setScenario(updatedScenario)
+  }
+
+  const handleEnableClick = async (enabled: boolean) => {
+    if (scenario.schedule) {
+      setChangingScenarioEnable(true)
+      await ScenarioService.patchScenario(scenario.id, { enabled })
+      setScenario({
+        ...scenario,
+        enabled
+      })
+      setChangingScenarioEnable(false)
+    }
+  }
+
+  const renderHeaderExtra = () => {
+    return [
+      scenario.schedule &&
+        <Switch checkedChildren="On"
+                unCheckedChildren="Off"
+                loading={changingScenarioEnable}
+                checked={scenario.enabled}
+                onClick={handleEnableClick} />
+
+      // <Button
+      //         key="settings"
+      //         onClick={handleSettingsClick}
+      //         icon={<SettingOutlined />}>Settings</Button>
+    ]
   }
 
   const handleGoBack = async () => {
@@ -41,7 +71,7 @@ function ScenarioPage (props: Props) {
       </Head>
 
       <PageWrapper title={scenario.name}
-                  //  extra={renderHeaderExtra()}
+                   extra={renderHeaderExtra()}
                    onBack={handleGoBack}>
 
         <div style={{ marginBottom: 16 }}>

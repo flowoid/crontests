@@ -159,6 +159,7 @@ export const FlowoidService = {
           state
           trigger {
             id
+            enabled
             schedule
           }
           actions {
@@ -230,6 +231,30 @@ export const FlowoidService = {
       }
     })
     return res.createOneWorkflowTrigger
+  },
+
+  async updateWorkflowTrigger (
+    workflowTriggerId: string,
+    update: {
+      schedule?: ScenarioSchedule
+      inputs?: Record<string, any>
+      enabled: Boolean
+    }
+  ) {
+    const mutation = gql`
+      mutation ($input: UpdateOneWorkflowTriggerInput!) {
+        updateOneWorkflowTrigger (input: $input) {
+          id
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(mutation, {
+      input: {
+        id: workflowTriggerId,
+        update
+      }
+    })
+    return res.updateOneWorkflowTrigger
   },
 
   async createWorkflowAction (workflowId: string, integrationActionId: string, inputs: Record<string, any>) {

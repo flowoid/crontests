@@ -2,6 +2,7 @@ export interface Scenario {
   id: string
   name: string
   state: string | null
+  enabled: boolean
   actions?: ScenarioAction[]
   schedule?: ScenarioSchedule
 }
