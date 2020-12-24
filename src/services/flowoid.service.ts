@@ -1,4 +1,5 @@
 import { gql, GraphQLClient } from 'graphql-request'
+import { ScenarioSchedule } from '../typings'
 
 export const FlowoidService = {
   async listIntegrations (filter: Record<string, any>) {
@@ -158,7 +159,6 @@ export const FlowoidService = {
           state
           trigger {
             id
-            name
             schedule
           }
           actions {
@@ -206,7 +206,12 @@ export const FlowoidService = {
     return res.createOneWorkflow
   },
 
-  async createWorkflowTrigger (workflowId: string, integrationTriggerId: string, inputs: Record<string, any>) {
+  async createWorkflowTrigger (
+    workflowId: string,
+    integrationTriggerId: string,
+    schedule: ScenarioSchedule,
+    inputs: Record<string, any> = {}
+  ) {
     const mutation = gql`
       mutation ($input: CreateOneWorkflowTriggerInput!) {
         createOneWorkflowTrigger (input: $input) {
@@ -219,6 +224,7 @@ export const FlowoidService = {
         workflowTrigger: {
           workflow: workflowId,
           integrationTrigger: integrationTriggerId,
+          schedule,
           inputs
         }
       }

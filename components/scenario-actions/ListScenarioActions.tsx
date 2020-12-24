@@ -1,6 +1,7 @@
-import { Avatar, Card, List, Tag } from 'antd'
+import { Card, List, Tag } from 'antd'
 import React from 'react'
 import { ScenarioAction } from '../../src/typings'
+import { ScenarioActionItem } from './ScenarioActionItem'
 
 interface Props {
   scenarioActions: ScenarioAction[]
@@ -28,19 +29,13 @@ export function ListScenarioActions (props: Props) {
   })
 
   return (
-    <Card>
+    <Card title="Test Actions">
       <List
         itemLayout="horizontal"
         dataSource={data}
         bordered
         renderItem={item => (
-          <List.Item actions={[<a key="edit">edit</a>, <a key="delete">delete</a>]}>
-            <List.Item.Meta
-              avatar={<Avatar src={item.avatar} shape="square" />}
-              title={item.title}
-              description={item.description}
-            />
-          </List.Item>
+          <ScenarioActionItem {...item} />
         )}
       />
     </Card>

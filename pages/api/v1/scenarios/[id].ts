@@ -65,6 +65,11 @@ async function fetchScenario (scenarioId: string, username: string): Promise<Sce
       state: workflow.state,
       actions: workflow.actions.edges.map(action => action.node),
       schedule: workflow.trigger
+        ? {
+          id: workflow.trigger.id,
+          ...(workflow.trigger.schedule ?? {})
+        }
+        : null
     }
     return scenario
   } else {
