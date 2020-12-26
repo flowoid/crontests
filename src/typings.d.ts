@@ -21,6 +21,12 @@ export interface ScenarioAction {
   }
 }
 
+export interface ScenarioRun {
+  id: string
+  status: string
+  createdAt: Date
+}
+
 interface BaseScenarioSchedule {
   id: string
 }

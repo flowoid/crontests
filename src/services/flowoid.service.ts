@@ -277,6 +277,30 @@ export const FlowoidService = {
     return res.createOneWorkflowAction
   },
 
+  async listWorkflowRuns (workflowId: string) {
+    const query = gql`
+      query ($filter: WorkflowRunFilter) {
+        workflowRuns (filter: $filter) {
+          edges {
+            node {
+              id
+              status
+              createdAt
+            }
+          }
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(query, {
+      filter: {
+        workflow: {
+          eq: workflowId
+        }
+      }
+    })
+    return res.workflowRuns.edges.map(edge => edge.node)
+  },
+
   async requestQuery (query: string, variables: Record<string, any>) {
     const client = new GraphQLClient(process.env.FLOWOID_ENDPOINT, {
       headers: {

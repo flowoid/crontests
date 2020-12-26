@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { FlowoidService } from '../../../../src/services/flowoid.service'
-import { Scenario } from '../../../../src/typings'
-import { getQueryParam } from '../../../../src/utils/next.utils'
-import { getAuthUsername } from '../../../../src/utils/user.utils'
+import { FlowoidService } from '../../../../../src/services/flowoid.service'
+import { Scenario } from '../../../../../src/typings'
+import { getQueryParam } from '../../../../../src/utils/next.utils'
+import { getAuthUsername } from '../../../../../src/utils/user.utils'
 
 export default function (req: NextApiRequest, res: NextApiResponse): Promise<void> {
   switch (req.method) {
