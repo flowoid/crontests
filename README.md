@@ -1,2 +1,2 @@
-# runcanaries
+# CronTests
 =======
