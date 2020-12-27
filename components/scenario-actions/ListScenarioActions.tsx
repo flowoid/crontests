@@ -1,3 +1,4 @@
+import { CheckOutlined } from '@ant-design/icons'
 import { Card, List, Tag } from 'antd'
 import React from 'react'
 import { ScenarioAction } from '../../src/typings'
@@ -12,15 +13,31 @@ export function ListScenarioActions (props: Props) {
 
   const data = scenarioActions.map(action => {
     let description = <></>
-    switch (action.integrationAction.key) {
-      case 'httpRequest':
-        description = <><Tag color="blue">{action.inputs.method}</Tag> {action.inputs.url}</>
-        break
-    }
     let avatar = action.integrationAction.integration.logo
     if (avatar.startsWith('/')) {
       avatar = `https://flowoid.com${avatar}`
     }
+
+    switch (action.integrationAction.key) {
+      case 'httpRequest':
+        description = <><Tag color="blue">{action.inputs.method}</Tag> {action.inputs.url}</>
+        break
+      case 'assertions':
+        description = (
+          <List
+            size="small"
+            dataSource={action.inputs.assertions ?? []}
+            renderItem={(item: { leftValue: string, comparator: string, rightValue: string }) => (
+              <List.Item>
+                <CheckOutlined /> {item.leftValue} {item.comparator} {item.rightValue}
+              </List.Item>
+            )}
+          />
+        )
+        avatar = '/images/assertions.svg'
+        break
+    }
+
     return {
       title: action.name,
       description,
