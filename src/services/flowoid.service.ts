@@ -257,7 +257,12 @@ export const FlowoidService = {
     return res.updateOneWorkflowTrigger
   },
 
-  async createWorkflowAction (workflowId: string, integrationActionId: string, inputs: Record<string, any>) {
+  async createWorkflowAction (options: {
+    workflowId: string
+    integrationActionId: string
+    previousActionId?: string
+    inputs: Record<string, any>
+  }) {
     const mutation = gql`
       mutation ($input: CreateOneWorkflowActionInput!) {
         createOneWorkflowAction (input: $input) {
@@ -268,9 +273,10 @@ export const FlowoidService = {
     const res = await FlowoidService.requestQuery(mutation, {
       input: {
         workflowAction: {
-          workflow: workflowId,
-          integrationAction: integrationActionId,
-          inputs
+          workflow: options.workflowId,
+          integrationAction: options.integrationActionId,
+          previousAction: options.previousActionId,
+          inputs: options.inputs
         }
       }
     })

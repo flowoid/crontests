@@ -67,7 +67,7 @@ async function fetchScenario (scenarioId: string, username: string): Promise<Sce
       id: workflow.id,
       name: workflow.name,
       state: workflow.state,
-      enabled: workflow.trigger.enabled ?? false,
+      enabled: workflow.trigger?.enabled ?? false,
       actions: workflow.actions.edges.map(action => action.node),
       schedule: workflow.trigger
         ? {

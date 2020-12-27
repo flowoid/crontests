@@ -38,8 +38,10 @@ async function createScenario (req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).send({ error: 'Unauthorized' })
   }
   try {
-    const integration = await FlowoidService.getIntegrationByKey('http')
-    const integrationAction = await FlowoidService.getIntegrationActionByKey(integration.id, 'httpRequest')
+    const httpIntegration = await FlowoidService.getIntegrationByKey('http')
+    const requestIntegrationAction = await FlowoidService.getIntegrationActionByKey(httpIntegration.id, 'httpRequest')
+    const logicIntegration = await FlowoidService.getIntegrationByKey('logic')
+    const assertionsIntegrationAction = await FlowoidService.getIntegrationActionByKey(logicIntegration.id, 'assertions')
 
     // Ensure project exists
     let project = await FlowoidService.getProjectBySlug(`user_${username}`)
@@ -48,9 +50,29 @@ async function createScenario (req: NextApiRequest, res: NextApiResponse) {
     }
 
     const workflow = await FlowoidService.createWorkflow(project.id, req.body.name)
-    await FlowoidService.createWorkflowAction(workflow.id, integrationAction.id, {
-      url: req.body.url,
-      method: req.body.method
+
+    // Add request action
+    const requestWorkflowAction = await FlowoidService.createWorkflowAction({
+      workflowId: workflow.id,
+      integrationActionId: requestIntegrationAction.id,
+      inputs: {
+        url: req.body.url,
+        method: req.body.method
+      }
+    })
+
+    // Add assertions action
+    await FlowoidService.createWorkflowAction({
+      workflowId: workflow.id,
+      integrationActionId: assertionsIntegrationAction.id,
+      previousActionId: requestWorkflowAction.id,
+      inputs: {
+        assertions: [{
+          leftValue: `{{${requestWorkflowAction.id}.status}}`,
+          comparator: '<',
+          rightValue: '400'
+        }]
+      }
     })
 
     res.send({
