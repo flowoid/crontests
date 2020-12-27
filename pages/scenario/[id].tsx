@@ -1,10 +1,11 @@
-import { Switch } from 'antd'
+import { Col, Row, Switch } from 'antd'
 import { GetServerSidePropsResult } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { PageWrapper } from '../../components/common/PageLayout/PageWrapper'
 import { ListScenarioActions } from '../../components/scenario-actions/ListScenarioActions'
+import { ScenarioRunList } from '../../components/scenario-runs/ScenarioRunList'
 import { ScenarioFrequency } from '../../components/scenarios/ScenarioFrequency'
 import { ScenarioService } from '../../src/services/scenario.service'
 import { Scenario } from '../../src/typings'
@@ -74,11 +75,18 @@ function ScenarioPage (props: Props) {
                    extra={renderHeaderExtra()}
                    onBack={handleGoBack}>
 
-        <div style={{ marginBottom: 16 }}>
-          <ScenarioFrequency scenario={scenario} onFrequencyUpdate={handleScenarioUpdate}/>
-        </div>
+        <Row gutter={16}>
+          <Col span={18}>
+            <div style={{ marginBottom: 16 }}>
+              <ScenarioFrequency scenario={scenario} onFrequencyUpdate={handleScenarioUpdate}/>
+            </div>
 
-        <ListScenarioActions scenarioActions={scenario.actions ?? []}/>
+            <ListScenarioActions scenarioActions={scenario.actions ?? []}/>
+          </Col>
+          <Col span={6}>
+            <ScenarioRunList scenario={scenario}/>
+          </Col>
+        </Row>
       </PageWrapper>
     </>
   )

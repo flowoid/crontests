@@ -29,11 +29,10 @@ export function ListScenarioActions (props: Props) {
   })
 
   return (
-    <Card title="Test Actions">
+    <Card title="Test Actions" size="small">
       <List
         itemLayout="horizontal"
         dataSource={data}
-        bordered
         renderItem={item => (
           <ScenarioActionItem {...item} />
         )}

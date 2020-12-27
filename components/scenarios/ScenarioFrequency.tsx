@@ -73,15 +73,14 @@ export const ScenarioFrequency = (props: Props) => {
     }
 
     return (
-      <Card>
+      <Card title="Scenario Schedule" size="small">
         <List
           itemLayout="horizontal"
           dataSource={[{
-            title: 'Schedule',
+            title: '',
             description,
             avatar: 'https://flowoid.com/logos/schedule.svg'
           }]}
-          bordered
           renderItem={item => (
             <ScenarioActionItem {...item} />
           )}

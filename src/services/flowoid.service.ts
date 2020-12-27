@@ -279,8 +279,8 @@ export const FlowoidService = {
 
   async listWorkflowRuns (workflowId: string) {
     const query = gql`
-      query ($filter: WorkflowRunFilter) {
-        workflowRuns (filter: $filter) {
+      query ($filter: WorkflowRunFilter, $sorting: [WorkflowRunSort!]) {
+        workflowRuns (filter: $filter, sorting: $sorting) {
           edges {
             node {
               id
@@ -296,7 +296,11 @@ export const FlowoidService = {
         workflow: {
           eq: workflowId
         }
-      }
+      },
+      sorting: [{
+        field: 'createdAt',
+        direction: 'DESC'
+      }]
     })
     return res.workflowRuns.edges.map(edge => edge.node)
   },
