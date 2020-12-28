@@ -82,7 +82,7 @@ export const ScenarioFrequency = (props: Props) => {
             avatar: 'https://flowoid.com/logos/schedule.svg'
           }]}
           renderItem={item => (
-            <ScenarioActionItem {...item} />
+            <ScenarioActionItem {...item} onEdit={() => setFrequencyModalOpen(true)}/>
           )}
         />
       </Card>

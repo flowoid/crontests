@@ -30,7 +30,7 @@ export const ScenarioService = {
     throw new Error() // TODO
   },
 
-  async patchScenario (id: string, data: Partial<Scenario>, req?: NextApiRequest): Promise<Scenario | null> {
+  async patchScenario (id: string, data: Partial<Scenario>, req?: NextApiRequest): Promise<{ id: Scenario['id'] } | null> {
     const res = await axios.patch(`http://localhost:3000/api/v1/scenarios/${id}`, {
       method: 'PATCH',
       headers: {

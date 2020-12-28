@@ -49,7 +49,7 @@ async function updateScenario (req: NextApiRequest, res: NextApiResponse): Promi
       const scheduleTrigger = await FlowoidService.getIntegrationTriggersByKey(scheduleIntegration.id, 'schedule')
       await FlowoidService.createWorkflowTrigger(scenario.id, scheduleTrigger.id, data.schedule)
     } else {
-      // TODO update workflow trigger
+      await FlowoidService.updateWorkflowTrigger(scenario.schedule.id, { schedule: data.schedule })
     }
   }
 
@@ -57,7 +57,11 @@ async function updateScenario (req: NextApiRequest, res: NextApiResponse): Promi
     await FlowoidService.updateWorkflowTrigger(scenario.schedule.id, { enabled: data.enabled })
   }
 
-  res.send({})
+  res.send({
+    scenario: {
+      id: scenario.id
+    }
+  })
 }
 
 async function fetchScenario (scenarioId: string, username: string): Promise<Scenario | null> {

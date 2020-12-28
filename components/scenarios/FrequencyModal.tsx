@@ -39,7 +39,7 @@ export const FrequencyModal = (props: Props) => {
   }
 
   const initialInputs = {
-    flowoid_schedule: {
+    flowoid_schedule: scenario.schedule ?? {
       frequency: 'interval',
       interval: 300
     }

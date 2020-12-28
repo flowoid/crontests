@@ -238,7 +238,7 @@ export const FlowoidService = {
     update: {
       schedule?: ScenarioSchedule
       inputs?: Record<string, any>
-      enabled: Boolean
+      enabled?: Boolean
     }
   ) {
     const mutation = gql`

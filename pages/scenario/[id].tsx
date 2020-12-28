@@ -3,6 +3,7 @@ import { GetServerSidePropsResult } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import { Loading } from '../../components/common/Loading'
 import { PageWrapper } from '../../components/common/PageLayout/PageWrapper'
 import { ListScenarioActions } from '../../components/scenario-actions/ListScenarioActions'
 import { ScenarioRunList } from '../../components/scenario-runs/ScenarioRunList'
@@ -21,6 +22,7 @@ interface Props {
 function ScenarioPage (props: Props) {
   const { error } = props
   const [scenario, setScenario] = useState(props.scenario)
+  const [loadingScenario, setLoadingScenario] = useState(false)
   const [changingScenarioEnable, setChangingScenarioEnable] = useState(false)
   const router = useRouter()
 
@@ -29,8 +31,10 @@ function ScenarioPage (props: Props) {
   }
 
   const handleScenarioUpdate = async () => {
+    setLoadingScenario(true)
     const updatedScenario = await ScenarioService.getScenarioById(scenario.id)
     setScenario(updatedScenario)
+    setLoadingScenario(false)
   }
 
   const handleEnableClick = async (enabled: boolean) => {
@@ -63,6 +67,10 @@ function ScenarioPage (props: Props) {
 
   const handleGoBack = async () => {
     await router.push('/')
+  }
+
+  if (loadingScenario) {
+    return <Loading />
   }
 
   return (
