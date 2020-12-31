@@ -1,7 +1,8 @@
-import { Form, Input, Modal, Select } from 'antd'
+import { Collapse, Form, Input, Modal, Select } from 'antd'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Scenario } from '../../src/typings'
+import { SchemaForm } from '../common/SchemaForm/SchemaForm'
 
 interface Props {
   visible: boolean
@@ -12,11 +13,21 @@ interface Props {
 export function ScenarioModal (props: Props) {
   const { visible, onCreate, onCancel } = props
   const [creatingScenario, setCreatingScenario] = useState(false)
+  const [advancedFormData, setAdvancedFormData] = useState<Record<string, any>>({})
   const [form] = Form.useForm()
+
+  const handleAdvancedFormChange = (data: Record<string, any>) => {
+    if (!creatingScenario) {
+      setAdvancedFormData(data)
+    }
+  }
 
   const handleFormSubmit = async () => {
     setCreatingScenario(true)
-    const formData = await form.validateFields()
+    const formData = {
+      ...(await form.validateFields()),
+      ...advancedFormData
+    }
     const res = await axios.post('/api/v1/scenarios', formData)
     onCreate(res.data.scenario)
     form.resetFields()
@@ -25,6 +36,73 @@ export function ScenarioModal (props: Props) {
 
   const handleFormFail = () => {
     // TODO
+  }
+
+  const advancedSchemaForm = {
+    type: 'object',
+    properties: {
+      contentType: {
+        title: 'Content-Type',
+        type: 'string',
+        enum: [
+          'application/json',
+          'application/xml',
+          'application/x-www-form-urlencoded',
+          'text/html',
+          'text/plain'
+        ]
+      },
+      headers: {
+        type: 'object',
+        additionalProperties: {
+          type: 'string'
+        }
+      },
+      queryParams: {
+        title: 'Query Params',
+        type: 'object',
+        additionalProperties: {
+          type: 'string'
+        }
+      },
+      body: {
+        type: 'object',
+        additionalProperties: true
+      },
+      basicAuth: {
+        title: 'Basic Authentication',
+        type: 'object',
+        properties: {
+          username: {
+            type: 'string'
+          },
+          password: {
+            type: 'string',
+            format: 'password'
+          }
+        }
+      },
+      proxy: {
+        type: 'object',
+        properties: {
+          host: {
+            type: 'string'
+          },
+          port: {
+            type: 'integer',
+            minimum: 1,
+            maximum: 65535
+          },
+          username: {
+            type: 'string'
+          },
+          password: {
+            type: 'string',
+            format: 'password'
+          }
+        }
+      }
+    }
   }
 
   return (
@@ -76,6 +154,16 @@ export function ScenarioModal (props: Props) {
         >
           <Input />
         </Form.Item>
+
+        <Collapse defaultActiveKey={[]} ghost>
+          <Collapse.Panel header="Advance settings" key="1">
+            <SchemaForm
+              schema={advancedSchemaForm}
+              hideSubmit={true}
+              onChange={handleAdvancedFormChange}
+              initialInputs={advancedFormData}/>
+          </Collapse.Panel>
+        </Collapse>
       </Form>
 
     </Modal>

@@ -52,13 +52,14 @@ async function createScenario (req: NextApiRequest, res: NextApiResponse) {
     const workflow = await FlowoidService.createWorkflow(project.id, req.body.name)
 
     // Add request action
+    const requestInputs = {
+      ...req.body,
+      name: undefined
+    }
     const requestWorkflowAction = await FlowoidService.createWorkflowAction({
       workflowId: workflow.id,
       integrationActionId: requestIntegrationAction.id,
-      inputs: {
-        url: req.body.url,
-        method: req.body.method
-      }
+      inputs: requestInputs
     })
 
     // Add assertions action
