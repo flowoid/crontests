@@ -89,7 +89,10 @@ function ScenarioPage (props: Props) {
               <ScenarioFrequency scenario={scenario} onFrequencyUpdate={handleScenarioUpdate}/>
             </div>
 
-            <ListScenarioActions scenarioActions={scenario.actions ?? []}/>
+            <ListScenarioActions
+              scenario={scenario}
+              scenarioActions={scenario.actions ?? []}
+              onScenarioActionUpdated={handleScenarioUpdate}/>
           </Col>
           <Col span={6}>
             <ScenarioRunList scenario={scenario}/>

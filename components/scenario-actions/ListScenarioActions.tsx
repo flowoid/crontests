@@ -1,15 +1,24 @@
 import { CheckOutlined } from '@ant-design/icons'
 import { Card, List, Tag } from 'antd'
-import React from 'react'
-import { ScenarioAction } from '../../src/typings'
+import React, { useState } from 'react'
+import { Scenario, ScenarioAction } from '../../src/typings'
+import { ScenarioModal } from '../scenarios/ScenarioModal'
 import { ScenarioActionItem } from './ScenarioActionItem'
 
 interface Props {
+  scenario: Scenario
   scenarioActions: ScenarioAction[]
+  onScenarioActionUpdated: (action: ScenarioAction) => any
 }
 
 export function ListScenarioActions (props: Props) {
-  const { scenarioActions } = props
+  const { scenario, scenarioActions, onScenarioActionUpdated } = props
+  const [editScenarioAction, setEditScenarioAction] = useState<ScenarioAction | null>(null)
+
+  const handleActionUpdateSubmit = (scenarioAction: ScenarioAction) => {
+    setEditScenarioAction(null)
+    onScenarioActionUpdated(scenarioAction)
+  }
 
   const data = scenarioActions.map(action => {
     let description = <></>
@@ -39,6 +48,7 @@ export function ListScenarioActions (props: Props) {
     }
 
     return {
+      action,
       title: action.name,
       description,
       avatar
@@ -51,9 +61,16 @@ export function ListScenarioActions (props: Props) {
         itemLayout="horizontal"
         dataSource={data}
         renderItem={item => (
-          <ScenarioActionItem {...item} />
+          <ScenarioActionItem {...item} onEdit={() => setEditScenarioAction(item.action)}/>
         )}
       />
+
+      <ScenarioModal
+        visible={!!editScenarioAction}
+        initialScenario={scenario}
+        initialScenarioAction={editScenarioAction}
+        onUpdateScenarioAction={handleActionUpdateSubmit}
+        onCancel={() => setEditScenarioAction(null)}/>
     </Card>
   )
 }

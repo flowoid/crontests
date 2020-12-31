@@ -283,6 +283,30 @@ export const FlowoidService = {
     return res.createOneWorkflowAction
   },
 
+  async updateWorkflowAction (
+    workflowActionId: string,
+    name: string,
+    inputs: Record<string, any>
+  ) {
+    const mutation = gql`
+      mutation ($input: UpdateOneWorkflowActionInput!) {
+        updateOneWorkflowAction (input: $input) {
+          id
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(mutation, {
+      input: {
+        id: workflowActionId,
+        update: {
+          name,
+          inputs
+        }
+      }
+    })
+    return res.updateOneWorkflowAction
+  },
+
   async listWorkflowRuns (workflowId: string) {
     const query = gql`
       query ($filter: WorkflowRunFilter, $sorting: [WorkflowRunSort!]) {

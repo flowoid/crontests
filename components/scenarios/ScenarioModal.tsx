@@ -1,37 +1,72 @@
 import { Collapse, Form, Input, Modal, Select } from 'antd'
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Scenario } from '../../src/typings'
+import { Scenario, ScenarioAction } from '../../src/typings'
 import { SchemaForm } from '../common/SchemaForm/SchemaForm'
 
-interface Props {
+interface CreateScenarioProps {
+  onCreateScenario: (scenario: Scenario) => void
+}
+
+interface UpdateScenarioActionProps {
+  initialScenario: Scenario
+  initialScenarioAction: ScenarioAction
+  onUpdateScenarioAction: (scenarioAction: ScenarioAction) => void
+}
+
+type Props = (CreateScenarioProps | UpdateScenarioActionProps) & {
   visible: boolean
-  onCreate: (scenario: Scenario) => void
   onCancel: () => void
 }
 
 export function ScenarioModal (props: Props) {
-  const { visible, onCreate, onCancel } = props
-  const [creatingScenario, setCreatingScenario] = useState(false)
-  const [advancedFormData, setAdvancedFormData] = useState<Record<string, any>>({})
+  const { visible, onCancel } = props
+  const initialInputs = (props as UpdateScenarioActionProps)?.initialScenarioAction?.inputs
+
+  const [submitingForm, setSubmitingForm] = useState(false)
+  const [advancedFormData, setAdvancedFormData] = useState<Record<string, any>>(initialInputs ?? {})
   const [form] = Form.useForm()
 
   const handleAdvancedFormChange = (data: Record<string, any>) => {
-    if (!creatingScenario) {
+    if (!submitingForm) {
       setAdvancedFormData(data)
     }
   }
 
   const handleFormSubmit = async () => {
-    setCreatingScenario(true)
+    setSubmitingForm(true)
     const formData = {
       ...(await form.validateFields()),
       ...advancedFormData
     }
-    const res = await axios.post('/api/v1/scenarios', formData)
-    onCreate(res.data.scenario)
-    form.resetFields()
-    setCreatingScenario(false)
+    try {
+      if ((props as UpdateScenarioActionProps)?.initialScenario) {
+        const updateProps = props as UpdateScenarioActionProps
+        await axios.patch(
+          `/api/v1/scenarios/${updateProps.initialScenario.id}/actions/${updateProps.initialScenarioAction.id}`,
+          {
+            ...formData,
+            name: updateProps.initialScenarioAction.name
+          }
+        )
+        updateProps.onUpdateScenarioAction({
+          ...updateProps.initialScenarioAction,
+          inputs: {
+            ...updateProps.initialScenarioAction.inputs,
+            ...formData
+          }
+        })
+      } else {
+        const createProps = props as CreateScenarioProps
+        const res = await axios.post('/api/v1/scenarios', formData)
+        createProps.onCreateScenario(res.data.scenario)
+      }
+      form.resetFields()
+    } catch (e) {
+      // TODO
+    } finally {
+      setSubmitingForm(false)
+    }
   }
 
   const handleFormFail = () => {
@@ -107,29 +142,32 @@ export function ScenarioModal (props: Props) {
 
   return (
     <Modal
-      title="Create Scenario"
+      title={initialInputs ? 'Update Scenario Action' : 'Create Scenario'}
       visible={visible}
-      okText="Create"
-      confirmLoading={creatingScenario}
+      okText={initialInputs ? 'Update' : 'Create'}
+      confirmLoading={submitingForm}
       onOk={handleFormSubmit}
       onCancel={onCancel}>
 
       <Form
         form={form}
-        name="create-scenario"
+        name="scenario=form"
         layout="vertical"
-        initialValues={{ method: 'GET' }}
+        initialValues={initialInputs ?? { method: 'GET' }}
         onFinish={handleFormSubmit}
         onFinishFailed={handleFormFail}
       >
-        <Form.Item
-          label="Scenario Name"
-          name="name"
-          rules={[{ required: true, message: 'Please input a name for the scenario.' }]}
-        >
-          <Input />
-        </Form.Item>
-
+        {
+          !initialInputs && (
+            <Form.Item
+              label="Scenario Name"
+              name="name"
+              rules={[{ required: true, message: 'Please input a name for the scenario.' }]}
+            >
+              <Input />
+            </Form.Item>
+          )
+        }
         <Form.Item
           label="HTTP Method"
           name="method"
