@@ -22,9 +22,13 @@ type Props = (CreateScenarioProps | UpdateScenarioActionProps) & {
 export function ScenarioModal (props: Props) {
   const { visible, onCancel } = props
   const initialInputs = (props as UpdateScenarioActionProps)?.initialScenarioAction?.inputs
+  const advancedInitialInputs = { ...initialInputs }
+  delete advancedInitialInputs.name
+  delete advancedInitialInputs.url
+  delete advancedInitialInputs.method
 
   const [submitingForm, setSubmitingForm] = useState(false)
-  const [advancedFormData, setAdvancedFormData] = useState<Record<string, any>>(initialInputs ?? {})
+  const [advancedFormData, setAdvancedFormData] = useState<Record<string, any>>(advancedInitialInputs ?? {})
   const [form] = Form.useForm()
 
   const handleAdvancedFormChange = (data: Record<string, any>) => {
