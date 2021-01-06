@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Scenario, ScenarioAction } from '../../src/typings'
 import { ScenarioModal } from '../scenarios/ScenarioModal'
 import { ScenarioActionItem } from './ScenarioActionItem'
+import { ScenarioAssertionsModal } from './ScenarioAssertionsModal'
 
 interface Props {
   scenario: Scenario
@@ -65,12 +66,26 @@ export function ListScenarioActions (props: Props) {
         )}
       />
 
-      <ScenarioModal
-        visible={!!editScenarioAction}
-        initialScenario={scenario}
-        initialScenarioAction={editScenarioAction}
-        onUpdateScenarioAction={handleActionUpdateSubmit}
-        onCancel={() => setEditScenarioAction(null)}/>
+      {
+        editScenarioAction?.integrationAction.key === 'httpRequest' && (
+          <ScenarioModal
+            visible={true}
+            initialScenario={scenario}
+            initialScenarioAction={editScenarioAction}
+            onUpdateScenarioAction={handleActionUpdateSubmit}
+            onCancel={() => setEditScenarioAction(null)}/>
+        )
+      }
+      {
+        editScenarioAction?.integrationAction.key === 'assertions' && (
+          <ScenarioAssertionsModal
+            visible={true}
+            scenario={scenario}
+            scenarioAction={editScenarioAction}
+            onUpdate={handleActionUpdateSubmit}
+            onCancel={() => setEditScenarioAction(null)}/>
+        )
+      }
     </Card>
   )
 }
