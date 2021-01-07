@@ -3,6 +3,7 @@ import { Button, Col, Form, Input, Modal, Row, Select, Space, Typography } from 
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Scenario, ScenarioAction } from '../../src/typings'
+import { assertionComparators, assertionResponseKeys } from '../../src/data/assertions'
 
 interface Props {
   visible: boolean
@@ -14,30 +15,7 @@ interface Props {
 
 export function ScenarioAssertionsModal (props: Props) {
   const { visible, scenario, scenarioAction, onUpdate, onCancel } = props
-  const assertions = (scenarioAction.inputs?.assertions ?? []).map(assertion => {
-    const match = assertion.leftValue.match(/\{\{\w+\.([^}]+)\}\}/)
-    let leftValueKey: string
-    let leftValue: string
-    if (match?.length > 1) {
-      if (match[1] === 'status') {
-        leftValueKey = 'statusCode'
-      } else if (match[1] === 'time') {
-        leftValueKey = 'time'
-      } else if (match[1].startsWith('data.')) {
-        leftValueKey = 'body'
-        leftValue = match[1].split('.').slice(1).join('.')
-      } else if (match[1].startsWith('headers.')) {
-        leftValueKey = 'headers'
-        leftValue = match[1].split('.').slice(1).join('.')
-      }
-    }
-    return {
-      leftValueKey,
-      leftValue,
-      comparator: assertion.comparator,
-      rightValue: assertion.rightValue
-    }
-  })
+  const assertions = scenarioAction.inputs?.assertions ?? []
 
   const [submitingForm, setSubmitingForm] = useState(false)
   const [formData, setFormData] = useState({ assertions })
@@ -137,10 +115,11 @@ export function ScenarioAssertionsModal (props: Props) {
                         }
                       >
                         <Select style={{ width: 220 }}>
-                          <Select.Option value="body">Response Body</Select.Option>
-                          <Select.Option value="headers">Response Headers</Select.Option>
-                          <Select.Option value="time">Response Time (ms)</Select.Option>
-                          <Select.Option value="statusCode">Status Code</Select.Option>
+                          {
+                            Object.entries(assertionResponseKeys).map(([key, value]) => (
+                              <Select.Option value={key}>{value}</Select.Option>
+                            ))
+                          }
                         </Select>
                       </Form.Item>
                       {
@@ -158,18 +137,11 @@ export function ScenarioAssertionsModal (props: Props) {
                         rules={[{ required: true, message: 'Please select a comparator.' }]}
                       >
                         <Select style={{ width: 220 }}>
-                          <Select.Option value="=">To equal</Select.Option>
-                          <Select.Option value="!=">Not to equal</Select.Option>
-                          <Select.Option value=">">To be greater than</Select.Option>
-                          <Select.Option value=">=">To be greater or equal than</Select.Option>
-                          <Select.Option value="<">To be less than</Select.Option>
-                          <Select.Option value="<=">To be less or equal than</Select.Option>
-                          <Select.Option value="contains">To contain</Select.Option>
-                          <Select.Option value="!contains">Not to contain</Select.Option>
-                          <Select.Option value="startsWith">To start with</Select.Option>
-                          <Select.Option value="!startsWith">Not to start with</Select.Option>
-                          <Select.Option value="endsWith">To end with</Select.Option>
-                          <Select.Option value="!endsWith">Not to end with</Select.Option>
+                          {
+                            Object.entries(assertionComparators).map(([key, value]) => (
+                              <Select.Option value={key}>{value}</Select.Option>
+                            ))
+                          }
                         </Select>
                       </Form.Item>
                     </Col>

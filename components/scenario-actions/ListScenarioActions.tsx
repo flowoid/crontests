@@ -1,6 +1,7 @@
 import { CheckOutlined } from '@ant-design/icons'
 import { Card, List, Tag } from 'antd'
 import React, { useState } from 'react'
+import { assertionComparators, assertionResponseKeys } from '../../src/data/assertions'
 import { Scenario, ScenarioAction } from '../../src/typings'
 import { ScenarioModal } from '../scenarios/ScenarioModal'
 import { ScenarioActionItem } from './ScenarioActionItem'
@@ -37,9 +38,14 @@ export function ListScenarioActions (props: Props) {
           <List
             size="small"
             dataSource={action.inputs.assertions ?? []}
-            renderItem={(item: { leftValue: string, comparator: string, rightValue: string }) => (
+            renderItem={(item: { leftValueKey: string, leftValue: string, comparator: string, rightValue: string }) => (
               <List.Item>
-                <CheckOutlined /> {item.leftValue} {item.comparator} {item.rightValue}
+                <CheckOutlined />&nbsp;
+                Expect&nbsp;
+                <strong>{assertionResponseKeys[item.leftValueKey]}</strong>&nbsp;
+                {item.leftValue ? <>[{item.leftValue}]&nbsp;</> : ''}
+                {assertionComparators[item.comparator]?.toLowerCase()}&nbsp;
+                <strong>{item.rightValue}</strong>
               </List.Item>
             )}
           />

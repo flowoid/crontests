@@ -155,7 +155,7 @@ export function ScenarioModal (props: Props) {
 
       <Form
         form={form}
-        name="scenario=form"
+        name="scenario-form"
         layout="vertical"
         initialValues={initialInputs ?? { method: 'GET' }}
         onFinish={handleFormSubmit}
