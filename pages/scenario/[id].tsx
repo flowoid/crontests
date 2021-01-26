@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { Loading } from '../../components/common/Loading'
 import { PageWrapper } from '../../components/common/PageLayout/PageWrapper'
 import { ListScenarioActions } from '../../components/scenario-actions/ListScenarioActions'
+import { ScenarioFailureActions } from '../../components/scenario-actions/ScenarioFailureActions'
 import { ScenarioRunList } from '../../components/scenario-runs/ScenarioRunList'
 import { ScenarioFrequency } from '../../components/scenarios/ScenarioFrequency'
 import { ScenarioService } from '../../src/services/scenario.service'
@@ -89,10 +90,16 @@ function ScenarioPage (props: Props) {
               <ScenarioFrequency scenario={scenario} onFrequencyUpdate={handleScenarioUpdate}/>
             </div>
 
-            <ListScenarioActions
-              scenario={scenario}
-              scenarioActions={scenario.actions ?? []}
-              onScenarioActionUpdated={handleScenarioUpdate}/>
+            <div style={{ marginBottom: 16 }}>
+              <ListScenarioActions
+                scenario={scenario}
+                scenarioActions={scenario.actions ?? []}
+                onScenarioActionUpdated={handleScenarioUpdate}/>
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <ScenarioFailureActions scenario={scenario}/>
+            </div>
           </Col>
           <Col span={6}>
             <ScenarioRunList scenario={scenario}/>

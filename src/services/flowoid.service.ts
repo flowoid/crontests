@@ -157,6 +157,10 @@ export const FlowoidService = {
           slug
           name
           state
+          runOnFailure
+          project {
+            id
+          }
           trigger {
             id
             enabled
@@ -205,6 +209,23 @@ export const FlowoidService = {
       }
     })
     return res.createOneWorkflow
+  },
+
+  async updateWorkflow (workflowId: string, update: { name?: string, runOnFailure?: string }) {
+    const mutation = gql`
+      mutation ($input: UpdateOneWorkflowInput!) {
+        updateOneWorkflow (input: $input) {
+          id
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(mutation, {
+      input: {
+        id: workflowId,
+        update
+      }
+    })
+    return res.updateOneWorkflow
   },
 
   async createWorkflowTrigger (
