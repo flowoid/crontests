@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { NextApiRequest } from 'next'
-import { Scenario, ScenarioRun } from '../typings'
+import { Scenario, ScenarioAction, ScenarioRun } from '../typings'
 
 export const ScenarioService = {
   async listScenarios (req?: NextApiRequest): Promise<Scenario[]> {
@@ -57,5 +57,18 @@ export const ScenarioService = {
       return res.data.runs
     }
     throw new Error() // TODO
+  },
+
+  async listFailureActions (scenarioId: string, req?: NextApiRequest): Promise<ScenarioAction[]> {
+    const res = await axios.get(`http://localhost:3000/api/v1/scenarios/${scenarioId}/failure-actions`, {
+      headers: {
+        cookie: req?.headers?.cookie
+      }
+    })
+    if (res.status < 400) {
+      return res.data.failureActions
+    }
+    throw new Error() // TODO
   }
+
 }

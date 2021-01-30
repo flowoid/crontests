@@ -63,7 +63,7 @@ export function ListScenarioActions (props: Props) {
   })
 
   return (
-    <Card title="Test Actions" size="small">
+    <>
       <List
         itemLayout="horizontal"
         dataSource={data}
@@ -92,6 +92,6 @@ export function ListScenarioActions (props: Props) {
             onCancel={() => setEditScenarioAction(null)}/>
         )
       }
-    </Card>
+    </>
   )
 }

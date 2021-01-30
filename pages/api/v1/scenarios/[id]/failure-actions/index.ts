@@ -5,8 +5,30 @@ import { getAuthUsername } from '../../../../../../src/utils/user.utils'
 
 export default function (req: NextApiRequest, res: NextApiResponse): Promise<void> {
   switch (req.method) {
+    case 'GET':
+      return listScenarioFailureActions(req, res)
     case 'POST':
       return createScenarioFailureAction(req, res)
+  }
+}
+
+async function listScenarioFailureActions (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  const username = await getAuthUsername(req)
+  if (!username) {
+    return res.status(401).send({ error: 'Unauthorized' })
+  }
+  const workflowId = getQueryParam(req, 'id').toLowerCase()
+  try {
+    const workflow = await FlowoidService.getWorkflowById(workflowId)
+    if (!workflow.runOnFailure) {
+      return res.send({ failureActions: [] })
+    }
+    const runOnFailureWorkflow = await FlowoidService.getWorkflowById(workflow.runOnFailure)
+    const failureActions = runOnFailureWorkflow.actions.edges.map(action => FlowoidService.parseActionInputs(action.node))
+    res.send({ failureActions })
+  } catch (e) {
+    console.error('ERROR:', e.message)
+    res.status(500).send({ error: e.message })
   }
 }
 
@@ -16,7 +38,6 @@ async function createScenarioFailureAction (req: NextApiRequest, res: NextApiRes
     return res.status(401).send({ error: 'Unauthorized' })
   }
   const workflowId = getQueryParam(req, 'id').toLowerCase()
-  console.log('req.body =>', req.body)
   try {
     const workflow = await FlowoidService.getWorkflowById(workflowId)
 
@@ -24,7 +45,6 @@ async function createScenarioFailureAction (req: NextApiRequest, res: NextApiRes
     let runOnFailureWorkflow: Record<string, any>
     if (workflow.runOnFailure) {
       runOnFailureWorkflow = await FlowoidService.getWorkflowById(workflow.runOnFailure)
-      console.log('runOnFailureWorkflow =>', runOnFailureWorkflow)
     } else {
       const res = await FlowoidService.createWorkflow(workflow.project.id, `__fail__${workflow.id}`)
       await FlowoidService.updateWorkflow(workflowId, { runOnFailure: res.id })

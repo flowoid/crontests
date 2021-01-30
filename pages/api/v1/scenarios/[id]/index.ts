@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { FlowoidService } from '../../../../../src/services/flowoid.service'
-import { Scenario, ScenarioAction } from '../../../../../src/typings'
+import { Scenario } from '../../../../../src/typings'
 import { getQueryParam } from '../../../../../src/utils/next.utils'
 import { getAuthUsername } from '../../../../../src/utils/user.utils'
 
@@ -72,7 +72,7 @@ async function fetchScenario (scenarioId: string, username: string): Promise<Sce
       name: workflow.name,
       state: workflow.state,
       enabled: workflow.trigger?.enabled ?? false,
-      actions: workflow.actions.edges.map(action => prepareActionInputs(action.node)),
+      actions: workflow.actions.edges.map(action => FlowoidService.parseActionInputs(action.node)),
       schedule: workflow.trigger
         ? {
           id: workflow.trigger.id,
@@ -84,34 +84,4 @@ async function fetchScenario (scenarioId: string, username: string): Promise<Sce
   } else {
     return null
   }
-}
-
-function prepareActionInputs (action: ScenarioAction): ScenarioAction {
-  if (action.integrationAction.key === 'assertions') {
-    action.inputs.assertions = (action.inputs?.assertions ?? []).map(assertion => {
-      const match = assertion.leftValue.match(/\{\{\w+\.([^}]+)\}\}/)
-      let leftValueKey: string
-      let leftValue: string
-      if (match?.length > 1) {
-        if (match[1] === 'status') {
-          leftValueKey = 'statusCode'
-        } else if (match[1] === 'time') {
-          leftValueKey = 'time'
-        } else if (match[1].startsWith('data.')) {
-          leftValueKey = 'body'
-          leftValue = match[1].split('.').slice(1).join('.')
-        } else if (match[1].startsWith('headers.')) {
-          leftValueKey = 'headers'
-          leftValue = match[1].split('.').slice(1).join('.')
-        }
-      }
-      return {
-        leftValueKey,
-        leftValue,
-        comparator: assertion.comparator,
-        rightValue: assertion.rightValue
-      }
-    })
-  }
-  return action
 }

@@ -1,4 +1,4 @@
-import { Col, Row, Switch } from 'antd'
+import { Card, Col, Row, Switch } from 'antd'
 import { GetServerSidePropsResult } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -10,18 +10,19 @@ import { ScenarioFailureActions } from '../../components/scenario-actions/Scenar
 import { ScenarioRunList } from '../../components/scenario-runs/ScenarioRunList'
 import { ScenarioFrequency } from '../../components/scenarios/ScenarioFrequency'
 import { ScenarioService } from '../../src/services/scenario.service'
-import { Scenario } from '../../src/typings'
+import { Scenario, ScenarioAction } from '../../src/typings'
 import { getQueryParam } from '../../src/utils/next.utils'
 import { getAuthUsername } from '../../src/utils/user.utils'
 
 interface Props {
   username: string
   scenario?: Scenario
+  failureActions?: ScenarioAction[]
   error?: string
 }
 
 function ScenarioPage (props: Props) {
-  const { error } = props
+  const { failureActions, error } = props
   const [scenario, setScenario] = useState(props.scenario)
   const [loadingScenario, setLoadingScenario] = useState(false)
   const [changingScenarioEnable, setChangingScenarioEnable] = useState(false)
@@ -91,14 +92,16 @@ function ScenarioPage (props: Props) {
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <ListScenarioActions
-                scenario={scenario}
-                scenarioActions={scenario.actions ?? []}
-                onScenarioActionUpdated={handleScenarioUpdate}/>
+              <Card title="Test Actions" size="small">
+                <ListScenarioActions
+                  scenario={scenario}
+                  scenarioActions={scenario.actions ?? []}
+                  onScenarioActionUpdated={handleScenarioUpdate}/>
+              </Card>
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <ScenarioFailureActions scenario={scenario}/>
+              <ScenarioFailureActions scenario={scenario} failureActions={failureActions ?? []} />
             </div>
           </Col>
           <Col span={6}>
@@ -123,6 +126,7 @@ export async function getServerSideProps (ctx): Promise<GetServerSidePropsResult
   try {
     const scenarioId = getQueryParam(ctx, 'id').toLowerCase()
     const scenario = await ScenarioService.getScenarioById(scenarioId, ctx.req)
+    const failureActions = await ScenarioService.listFailureActions(scenarioId, ctx.req)
     if (!scenario) {
       return {
         notFound: true
@@ -131,7 +135,8 @@ export async function getServerSideProps (ctx): Promise<GetServerSidePropsResult
     return {
       props: {
         username,
-        scenario
+        scenario,
+        failureActions
       }
     }
   } catch (e) {

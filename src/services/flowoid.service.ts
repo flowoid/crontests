@@ -1,5 +1,5 @@
 import { gql, GraphQLClient } from 'graphql-request'
-import { ScenarioSchedule } from '../typings'
+import { ScenarioAction, ScenarioSchedule } from '../typings'
 
 export const FlowoidService = {
   async listIntegrations (filter: Record<string, any>) {
@@ -363,5 +363,38 @@ export const FlowoidService = {
       }
     })
     return await client.request(query, variables)
+  },
+
+  /**
+   * Transforms Flowoid inputs into CronTests action inputs
+   */
+  parseActionInputs (action: ScenarioAction): ScenarioAction {
+    if (action.integrationAction.key === 'assertions') {
+      action.inputs.assertions = (action.inputs?.assertions ?? []).map(assertion => {
+        const match = assertion.leftValue.match(/\{\{\w+\.([^}]+)\}\}/)
+        let leftValueKey: string
+        let leftValue: string
+        if (match?.length > 1) {
+          if (match[1] === 'status') {
+            leftValueKey = 'statusCode'
+          } else if (match[1] === 'time') {
+            leftValueKey = 'time'
+          } else if (match[1].startsWith('data.')) {
+            leftValueKey = 'body'
+            leftValue = match[1].split('.').slice(1).join('.')
+          } else if (match[1].startsWith('headers.')) {
+            leftValueKey = 'headers'
+            leftValue = match[1].split('.').slice(1).join('.')
+          }
+        }
+        return {
+          leftValueKey,
+          leftValue,
+          comparator: assertion.comparator,
+          rightValue: assertion.rightValue
+        }
+      })
+    }
+    return action
   }
 }
