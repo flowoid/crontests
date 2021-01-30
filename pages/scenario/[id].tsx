@@ -22,9 +22,11 @@ interface Props {
 }
 
 function ScenarioPage (props: Props) {
-  const { failureActions, error } = props
+  const { error } = props
   const [scenario, setScenario] = useState(props.scenario)
+  const [failureActions, setFailureActions] = useState(props.failureActions)
   const [loadingScenario, setLoadingScenario] = useState(false)
+  const [loadingFailureActions, setLoadingFailureActions] = useState(false)
   const [changingScenarioEnable, setChangingScenarioEnable] = useState(false)
   const router = useRouter()
 
@@ -37,6 +39,13 @@ function ScenarioPage (props: Props) {
     const updatedScenario = await ScenarioService.getScenarioById(scenario.id)
     setScenario(updatedScenario)
     setLoadingScenario(false)
+  }
+
+  const handleFailureActionsChange = async () => {
+    setLoadingFailureActions(true)
+    const actions = await ScenarioService.listFailureActions(scenario.id)
+    setFailureActions(actions)
+    setLoadingFailureActions(false)
   }
 
   const handleEnableClick = async (enabled: boolean) => {
@@ -96,12 +105,20 @@ function ScenarioPage (props: Props) {
                 <ListScenarioActions
                   scenario={scenario}
                   scenarioActions={scenario.actions ?? []}
+                  type="actions"
                   onScenarioActionUpdated={handleScenarioUpdate}/>
               </Card>
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <ScenarioFailureActions scenario={scenario} failureActions={failureActions ?? []} />
+              {
+                loadingFailureActions
+                  ? <Loading />
+                  : <ScenarioFailureActions
+                      scenario={scenario}
+                      failureActions={failureActions ?? []}
+                      onFailureActionsUpdated={handleFailureActionsChange} />
+              }
             </div>
           </Col>
           <Col span={6}>

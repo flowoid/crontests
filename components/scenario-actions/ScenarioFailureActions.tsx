@@ -7,11 +7,17 @@ import { ScenarioFailureModal } from './ScenarioFailureModal'
 interface Props {
   scenario: Scenario
   failureActions: ScenarioAction[]
+  onFailureActionsUpdated: () => any
 }
 
 export function ScenarioFailureActions (props: Props) {
-  const { scenario, failureActions } = props
+  const { scenario, failureActions, onFailureActionsUpdated } = props
   const [modalOpen, setModalOpen] = useState(false)
+
+  const handleActionAdded = () => {
+    setModalOpen(false)
+    onFailureActionsUpdated()
+  }
 
   return (
     <Card title="Actions On Failure" size="small">
@@ -19,7 +25,8 @@ export function ScenarioFailureActions (props: Props) {
       <ListScenarioActions
         scenario={scenario}
         scenarioActions={failureActions}
-        onScenarioActionUpdated={() => {}}/>
+        type="failure-actions"
+        onScenarioActionUpdated={onFailureActionsUpdated}/>
 
       <div style={{ marginTop: 16 }}>
         <Button type="primary" onClick={() => setModalOpen(true)}>Add Action On Failure</Button>
@@ -27,7 +34,7 @@ export function ScenarioFailureActions (props: Props) {
 
       <ScenarioFailureModal scenario={scenario}
                             visible={modalOpen}
-                            onActionAdded={() => setModalOpen(false)}
+                            onActionAdded={handleActionAdded}
                             onCancel={() => setModalOpen(false)} />
     </Card>
   )

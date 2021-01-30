@@ -1,5 +1,5 @@
 import { CheckOutlined } from '@ant-design/icons'
-import { Card, List, Tag } from 'antd'
+import { List, Tag } from 'antd'
 import React, { useState } from 'react'
 import { assertionComparators, assertionResponseKeys } from '../../src/data/assertions'
 import { Scenario, ScenarioAction } from '../../src/typings'
@@ -10,11 +10,12 @@ import { ScenarioAssertionsModal } from './ScenarioAssertionsModal'
 interface Props {
   scenario: Scenario
   scenarioActions: ScenarioAction[]
+  type: 'actions' | 'failure-actions'
   onScenarioActionUpdated: (action: ScenarioAction) => any
 }
 
 export function ListScenarioActions (props: Props) {
-  const { scenario, scenarioActions, onScenarioActionUpdated } = props
+  const { scenario, scenarioActions, type, onScenarioActionUpdated } = props
   const [editScenarioAction, setEditScenarioAction] = useState<ScenarioAction | null>(null)
 
   const handleActionUpdateSubmit = (scenarioAction: ScenarioAction) => {
@@ -78,6 +79,7 @@ export function ListScenarioActions (props: Props) {
             visible={true}
             initialScenario={scenario}
             initialScenarioAction={editScenarioAction}
+            type={type}
             onUpdateScenarioAction={handleActionUpdateSubmit}
             onCancel={() => setEditScenarioAction(null)}/>
         )

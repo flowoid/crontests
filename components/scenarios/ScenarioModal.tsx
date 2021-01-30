@@ -16,11 +16,12 @@ interface UpdateScenarioActionProps {
 
 type Props = (CreateScenarioProps | UpdateScenarioActionProps) & {
   visible: boolean
+  type: 'actions' | 'failure-actions'
   onCancel: () => void
 }
 
 export function ScenarioModal (props: Props) {
-  const { visible, onCancel } = props
+  const { visible, type, onCancel } = props
   const initialInputs = (props as UpdateScenarioActionProps)?.initialScenarioAction?.inputs
   const advancedInitialInputs = { ...initialInputs }
   delete advancedInitialInputs.name
@@ -48,12 +49,11 @@ export function ScenarioModal (props: Props) {
       ...(await form.validateFields()),
       ...advancedFormData
     }
-    console.log('formData =>', formData)
     try {
       if ((props as UpdateScenarioActionProps)?.initialScenario) {
         const updateProps = props as UpdateScenarioActionProps
         await axios.patch(
-          `/api/v1/scenarios/${updateProps.initialScenario.id}/actions/${updateProps.initialScenarioAction.id}`,
+          `/api/v1/scenarios/${updateProps.initialScenario.id}/${type}/${updateProps.initialScenarioAction.id}`,
           {
             ...formData,
             name: updateProps.initialScenarioAction.name
