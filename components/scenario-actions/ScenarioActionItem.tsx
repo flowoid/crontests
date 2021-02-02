@@ -5,12 +5,18 @@ interface Props {
   title: JSX.Element | string
   description: JSX.Element | string
   avatar: string
+  deletable?: boolean
   onEdit?: () => any
+  onDelete?: () => any
 }
 
 export function ScenarioActionItem (props: Props) {
+  const itemActions = [
+    <a onClick={() => props.onEdit?.()} key="edit">edit</a>,
+    props.deletable && <a onClick={() => props.onDelete?.()} key="delete">delete</a>
+  ].filter(action => !!action)
   return (
-    <List.Item actions={[<a onClick={() => props.onEdit?.()} key="edit">edit</a>]}>
+    <List.Item actions={itemActions}>
       <List.Item.Meta
         title={props.title}
         description={props.description}

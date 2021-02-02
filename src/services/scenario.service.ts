@@ -69,6 +69,18 @@ export const ScenarioService = {
       return res.data.failureActions
     }
     throw new Error() // TODO
+  },
+
+  async deleteFailureAction (acscenarioId: string, actionId: string, req?: NextApiRequest): Promise<ScenarioAction[]> {
+    const res = await axios.delete(`http://localhost:3000/api/v1/scenarios/${acscenarioId}/failure-actions/${actionId}`, {
+      headers: {
+        cookie: req?.headers?.cookie
+      }
+    })
+    if (res.status < 400) {
+      return res.data.failureActions
+    }
+    throw new Error() // TODO
   }
 
 }

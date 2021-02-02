@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { assertionComparators, assertionResponseKeys } from '../../src/data/assertions'
 import { Scenario, ScenarioAction } from '../../src/typings'
 import { ScenarioModal } from '../scenarios/ScenarioModal'
+import { DeleteScenarioActionModal } from './DeleteScenarioActionModal'
 import { ScenarioActionItem } from './ScenarioActionItem'
 import { ScenarioAssertionsModal } from './ScenarioAssertionsModal'
 
@@ -12,15 +13,22 @@ interface Props {
   scenarioActions: ScenarioAction[]
   type: 'actions' | 'failure-actions'
   onScenarioActionUpdated: (action: ScenarioAction) => any
+  onScenarioActionDeleted?: () => any
 }
 
 export function ListScenarioActions (props: Props) {
-  const { scenario, scenarioActions, type, onScenarioActionUpdated } = props
+  const { scenario, scenarioActions, type, onScenarioActionUpdated, onScenarioActionDeleted } = props
   const [editScenarioAction, setEditScenarioAction] = useState<ScenarioAction | null>(null)
+  const [deleteScenarioAction, setDeleteScenarioAction] = useState<ScenarioAction | null>(null)
 
   const handleActionUpdateSubmit = (scenarioAction: ScenarioAction) => {
     setEditScenarioAction(null)
     onScenarioActionUpdated(scenarioAction)
+  }
+
+  const handleActionDelete = () => {
+    setDeleteScenarioAction(null)
+    onScenarioActionDeleted?.()
   }
 
   const data = scenarioActions.map(action => {
@@ -69,7 +77,11 @@ export function ListScenarioActions (props: Props) {
         itemLayout="horizontal"
         dataSource={data}
         renderItem={item => (
-          <ScenarioActionItem {...item} onEdit={() => setEditScenarioAction(item.action)}/>
+          <ScenarioActionItem
+            {...item}
+            deletable={type === 'failure-actions'}
+            onEdit={() => setEditScenarioAction(item.action)}
+            onDelete={() => setDeleteScenarioAction(item.action)}/>
         )}
       />
 
@@ -92,6 +104,17 @@ export function ListScenarioActions (props: Props) {
             scenarioAction={editScenarioAction}
             onUpdate={handleActionUpdateSubmit}
             onCancel={() => setEditScenarioAction(null)}/>
+        )
+      }
+
+      {
+        deleteScenarioAction && (
+          <DeleteScenarioActionModal
+            visible={true}
+            scenarioId={scenario.id}
+            scenarioAction={deleteScenarioAction}
+            onDeleteScenarioAction={handleActionDelete}
+            onCancel={() => setDeleteScenarioAction(null)} />
         )
       }
     </>

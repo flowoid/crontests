@@ -328,6 +328,22 @@ export const FlowoidService = {
     return res.updateOneWorkflowAction
   },
 
+  async deleteWorkflowAction (workflowActionId: string) {
+    const mutation = gql`
+      mutation ($input: DeleteOneInput!) {
+        deleteOneWorkflowAction (input: $input) {
+          id
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(mutation, {
+      input: {
+        id: workflowActionId
+      }
+    })
+    return res.deleteOneWorkflowAction
+  },
+
   async listWorkflowRuns (workflowId: string) {
     const query = gql`
       query ($filter: WorkflowRunFilter, $sorting: [WorkflowRunSort!]) {

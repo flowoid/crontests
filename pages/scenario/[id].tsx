@@ -117,7 +117,7 @@ function ScenarioPage (props: Props) {
                   : <ScenarioFailureActions
                       scenario={scenario}
                       failureActions={failureActions ?? []}
-                      onFailureActionsUpdated={handleFailureActionsChange} />
+                      onFailureActionsChange={handleFailureActionsChange} />
               }
             </div>
           </Col>
