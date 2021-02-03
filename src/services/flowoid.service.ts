@@ -143,6 +143,9 @@ export const FlowoidService = {
       filter: {
         project: {
           eq: projectId
+        },
+        slug: {
+          notLike: '__fail__'
         }
       }
     })
