@@ -5,6 +5,9 @@ import { Dropdown, Layout, Menu } from 'antd'
 import { useRouter } from 'next/router'
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint'
 
+import styles from './PageLayout.module.scss'
+import { Auth } from 'aws-amplify'
+
 interface Props {
   children: JSX.Element
 }
@@ -14,28 +17,25 @@ export default function PageLayout ({ children }: Props) {
   const breakpoint = useBreakpoint()
   const hasMobileSider = breakpoint.xs
   const [siderCollapsed, setSiderCollapsed] = useState(true)
-
-  const [user] = useState(null)
+  const [user, setUser] = useState<Record<string, any> | null>(null)
 
   useEffect(() => {
-    // void (async () => {
-    //   try {
-    //     const user = await Auth.currentAuthenticatedUser()
-    //     console.log('user =>', user)
-    //     setUser(user)
-    //   } catch (e) {
-    //     console.log('error =>', e)
-    //     setUser(null)
-    //   }
-    // })()
-  })
+    void (async () => {
+      try {
+        const user = await Auth.currentAuthenticatedUser()
+        setUser(user)
+      } catch (e) {
+        setUser(null)
+      }
+    })()
+  }, [])
 
   const handleSettingsClick = async () => {
     await router.push('/settings')
   }
 
   const handleLogoutClick = async () => {
-    // await logout()
+    await Auth.signOut()
     window.location.href = '/'
   }
 
@@ -69,7 +69,7 @@ export default function PageLayout ({ children }: Props) {
 
       return (
         <Dropdown overlay={menu}>
-          <span className='user-menu'>
+          <span className={styles['user-menu']}>
             <span>{user.username}</span>
           </span>
         </Dropdown>
@@ -100,9 +100,9 @@ export default function PageLayout ({ children }: Props) {
 
       <Layout>
 
-        <Layout.Header className="layout-header" style={{ padding: 0 }}>
+        <Layout.Header className={styles['layout-header']} style={{ padding: 0 }}>
           {React.createElement(siderCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-            className: 'toggle-sider',
+            className: styles['toggle-sider'],
             onClick: () => setSiderCollapsed(!siderCollapsed)
           })}
           <div style={{ flex: '1 1 0%' }}/>
