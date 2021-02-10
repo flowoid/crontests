@@ -45,6 +45,7 @@ function HomePage (props: Props) {
 
       <ScenarioModal
         visible={scenarioModalVisible}
+        type="actions"
         onCreateScenario={handleScenarioCreated}
         onCancel={() => setScenarioModalVisible(false)}
       />
