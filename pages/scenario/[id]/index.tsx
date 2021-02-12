@@ -1,18 +1,19 @@
-import { Card, Col, Row, Switch } from 'antd'
+import { SettingOutlined } from '@ant-design/icons'
+import { Button, Card, Col, Row, Switch } from 'antd'
 import { GetServerSidePropsResult } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { Loading } from '../../components/common/Loading'
-import { PageWrapper } from '../../components/common/PageLayout/PageWrapper'
-import { ListScenarioActions } from '../../components/scenario-actions/ListScenarioActions'
-import { ScenarioFailureActions } from '../../components/scenario-actions/ScenarioFailureActions'
-import { ScenarioRunList } from '../../components/scenario-runs/ScenarioRunList'
-import { ScenarioFrequency } from '../../components/scenarios/ScenarioFrequency'
-import { ScenarioService } from '../../src/services/scenario.service'
-import { Scenario, ScenarioAction } from '../../src/typings'
-import { getQueryParam } from '../../src/utils/next.utils'
-import { getAuthUsername } from '../../src/utils/user.utils'
+import { Loading } from '../../../components/common/Loading'
+import { PageWrapper } from '../../../components/common/PageLayout/PageWrapper'
+import { ListScenarioActions } from '../../../components/scenario-actions/ListScenarioActions'
+import { ScenarioFailureActions } from '../../../components/scenario-actions/ScenarioFailureActions'
+import { ScenarioRunList } from '../../../components/scenario-runs/ScenarioRunList'
+import { ScenarioFrequency } from '../../../components/scenarios/ScenarioFrequency'
+import { ScenarioService } from '../../../src/services/scenario.service'
+import { Scenario, ScenarioAction } from '../../../src/typings'
+import { getQueryParam } from '../../../src/utils/next.utils'
+import { getAuthUsername } from '../../../src/utils/user.utils'
 
 interface Props {
   username: string
@@ -60,19 +61,23 @@ function ScenarioPage (props: Props) {
     }
   }
 
+  const handleSettingsClick = async () => {
+    await router.push(`/scenario/${scenario.id}/settings`)
+  }
+
   const renderHeaderExtra = () => {
     return [
-      scenario.schedule &&
+      (
+        scenario.schedule &&
         <Switch checkedChildren="On"
                 unCheckedChildren="Off"
                 loading={changingScenarioEnable}
                 checked={scenario.enabled}
                 onClick={handleEnableClick} />
-
-      // <Button
-      //         key="settings"
-      //         onClick={handleSettingsClick}
-      //         icon={<SettingOutlined />}>Settings</Button>
+      ),
+      <Button key="settings"
+              onClick={handleSettingsClick}
+              icon={<SettingOutlined />}>Settings</Button>
     ]
   }
 

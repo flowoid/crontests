@@ -43,6 +43,10 @@ async function updateScenario (req: NextApiRequest, res: NextApiResponse): Promi
   const scenario = await fetchScenario(scenarioId, username)
   const data: Partial<Scenario> = req.body.data
 
+  if (data.name) {
+    await FlowoidService.updateWorkflow(scenarioId, { name: data.name })
+  }
+
   if (data.schedule) {
     if (!scenario.schedule) {
       const scheduleIntegration = await FlowoidService.getIntegrationByKey('schedule')
