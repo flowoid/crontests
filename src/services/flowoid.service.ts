@@ -231,6 +231,22 @@ export const FlowoidService = {
     return res.updateOneWorkflow
   },
 
+  async deleteWorkflow (workflowId: string) {
+    const mutation = gql`
+      mutation ($input: DeleteOneInput!) {
+        deleteOneWorkflow (input: $input) {
+          id
+        }
+      }
+    `
+    const res = await FlowoidService.requestQuery(mutation, {
+      input: {
+        id: workflowId
+      }
+    })
+    return res.deleteOneWorkflow
+  },
+
   async createWorkflowTrigger (
     workflowId: string,
     integrationTriggerId: string,

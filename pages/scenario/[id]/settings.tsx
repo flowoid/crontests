@@ -2,13 +2,14 @@ import { GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import React, { useState } from 'react'
-import { Card } from 'antd'
+import { Button, Card } from 'antd'
 import { PageWrapper } from '../../../components/common/PageLayout/PageWrapper'
 import { getAuthUsername } from '../../../src/utils/user.utils'
 import { getQueryParam } from '../../../src/utils/next.utils'
 import { ScenarioService } from '../../../src/services/scenario.service'
 import { Scenario } from '../../../src/typings'
 import { ScenarioForm } from '../../../components/scenarios/ScenarioForm'
+import { DeleteScenarioModal } from '../../../components/scenarios/DeleteScenarioModal'
 
 interface Props {
   scenario?: Scenario
@@ -19,6 +20,7 @@ function ScenarioSettingsPage (props: Props) {
   const { scenario, error } = props
   const [updateLoading, setUpdateLoading] = useState(false)
   const [updateError, setUpdateError] = useState<string | null>(error ?? null)
+  const [deleteScenarioModalOpen, setDeleteScenarioModalOpen] = useState(false)
   const router = useRouter()
 
   const handleScenarioUpdate = async (update: Partial<Scenario>) => {
@@ -31,6 +33,10 @@ function ScenarioSettingsPage (props: Props) {
     } finally {
       setUpdateLoading(false)
     }
+  }
+
+  const handleScenarioDelete = async () => {
+    await router.push('/')
   }
 
   const handleGoBack = async () => {
@@ -54,14 +60,14 @@ function ScenarioSettingsPage (props: Props) {
                         error={updateError}/>
         </Card>
 
-        {/* <Card title="Danger settings" style={{ marginTop: 24, border: '1px solid #d40000' }}>
-          <Button type="primary" danger onClick={() => setDeleteWorkflowModalOpen(true)}>Delete workflow</Button>
+        <Card title="Danger settings" style={{ marginTop: 24, border: '1px solid #d40000' }}>
+          <Button type="primary" danger onClick={() => setDeleteScenarioModalOpen(true)}>Delete scenario</Button>
         </Card>
 
-         <DeleteWorkflowModal visible={deleteWorkflowModalOpen}
-                             workflow={workflow}
-                             onDeleteWorkflow={handleWorkflowDelete}
-                             onCancel={() => setDeleteWorkflowModalOpen(false)}/> */}
+         <DeleteScenarioModal visible={deleteScenarioModalOpen}
+                              scenario={scenario}
+                              onDeleteScenario={handleScenarioDelete}
+                              onCancel={() => setDeleteScenarioModalOpen(false)}/>
       </PageWrapper>
     </>
   )

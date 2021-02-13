@@ -10,6 +10,8 @@ export default function (req: NextApiRequest, res: NextApiResponse): Promise<voi
       return getScenarioById(req, res)
     case 'PATCH':
       return updateScenario(req, res)
+    case 'DELETE':
+      return deleteScenario(req, res)
   }
 }
 
@@ -66,6 +68,23 @@ async function updateScenario (req: NextApiRequest, res: NextApiResponse): Promi
       id: scenario.id
     }
   })
+}
+
+async function deleteScenario (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  const username = await getAuthUsername(req)
+  if (!username) {
+    return res.status(401).send({ error: 'Unauthorized' })
+  }
+  try {
+    const scenarioId = getQueryParam(req, 'id').toLowerCase()
+    await FlowoidService.deleteWorkflow(scenarioId)
+    res.send({})
+  } catch (e) {
+    console.error('ERROR:', e)
+    res.status(500).send({
+      error: e.message ?? 'Server Error'
+    })
+  }
 }
 
 async function fetchScenario (scenarioId: string, username: string): Promise<Scenario | null> {

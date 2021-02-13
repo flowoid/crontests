@@ -47,6 +47,21 @@ export const ScenarioService = {
     throw new Error() // TODO
   },
 
+  async deleteScenario (id: string, req?: NextApiRequest): Promise<{ id: Scenario['id'] } | null> {
+    const res = await axios.delete(`http://localhost:3000/api/v1/scenarios/${id}`, {
+      headers: {
+        cookie: req?.headers?.cookie
+      }
+    })
+    if (res.status < 400) {
+      return res.data.scenario
+    }
+    if (res.status === 404) {
+      return null
+    }
+    throw new Error() // TODO
+  },
+
   async listScenarioRuns (id: string, req?: NextApiRequest): Promise<ScenarioRun[]> {
     const res = await axios.get(`http://localhost:3000/api/v1/scenarios/${id}/runs`, {
       headers: {
