@@ -42,7 +42,7 @@ async function createScenarioFailureAction (req: NextApiRequest, res: NextApiRes
   try {
     const workflow = await FlowoidService.getWorkflowById(workflowId)
 
-    // Ensure run on failure workflow
+    // Ensure run on failure workflow exists
     let runOnFailureWorkflow: Record<string, any>
     if (workflow.runOnFailure) {
       runOnFailureWorkflow = await FlowoidService.getWorkflowById(workflow.runOnFailure)
@@ -63,7 +63,7 @@ async function createScenarioFailureAction (req: NextApiRequest, res: NextApiRes
         integrationActionId = httpIntegrationAction.id
         actionInputs = req.body.inputs
         break
-      case 'sendEmail':
+      case 'SendEmail':
         const emailIntegration = await FlowoidService.getIntegrationByKey('aws-email')
         const emailIntegrationAction = await FlowoidService.getIntegrationActionByKey(emailIntegration.id, 'SendEmail')
         integrationActionId = emailIntegrationAction.id

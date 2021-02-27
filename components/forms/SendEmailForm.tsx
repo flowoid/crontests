@@ -1,17 +1,20 @@
 import { Form, Input } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import React from 'react'
+import { Scenario } from '../../src/typings'
+import { isEmptyObj } from '../../src/utils/object.utils'
 
 interface Props {
   form: FormInstance<any>
   initialInputs?: Record<string, any>
   prependFields?: JSX.Element[]
+  scenario: Scenario
   onSubmit: () => void
   onSubmitFailed?: () => void
 }
 
 export function SendEmailForm (props: Props) {
-  const { form, prependFields, onSubmit, onSubmitFailed } = props
+  const { form, prependFields, scenario, onSubmit, onSubmitFailed } = props
   let initialInputs = props.initialInputs ?? {}
 
   // Parse Flowoid inputs
@@ -21,6 +24,12 @@ export function SendEmailForm (props: Props) {
       subject: initialInputs.Content?.Simple?.Subject?.Data,
       body: initialInputs.Content?.Simple?.Body?.Html?.Data
     }
+  }
+  if (isEmptyObj(initialInputs)) {
+    initialInputs.subject = `CronTest scenario "${scenario.name}" failed`
+    initialInputs.body =
+      `Your CronTest test scenario <strong>${scenario.name}</strong> just failed.<br/><br/>\n\n` +
+      `Check it here: https://crontests.com/scenario/${scenario.id}`
   }
 
   return (

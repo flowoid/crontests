@@ -36,8 +36,6 @@ export function ScenarioFailureModal (props: Props) {
   const initialInputs = initialScenarioAction?.inputs ?? {}
   const isNewAction = !initialScenarioActionKey
 
-  console.log('initialInputs =>', initialInputs)
-
   const [selectedActionKey, setSelectedActionKey] = useState<string | null>(initialScenarioActionKey)
   const [loading, setLoading] = useState<boolean>(false)
   const [form] = Form.useForm()
@@ -137,7 +135,7 @@ export function ScenarioFailureModal (props: Props) {
       key: 'SendEmail',
       name: 'Send Email',
       logo: '/images/email.svg',
-      form: <SendEmailForm form={form} onSubmit={handleFormSubmit} initialInputs={initialInputs}/>
+      form: <SendEmailForm form={form} onSubmit={handleFormSubmit} initialInputs={initialInputs} scenario={scenario}/>
     }
   ]
   const selectedAction = selectedActionKey
