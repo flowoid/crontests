@@ -2,42 +2,72 @@ import { Avatar, Card, Form, List } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Scenario } from '../../src/typings'
+import { Scenario, ScenarioAction } from '../../src/typings'
 import { HttpRequestForm } from '../forms/HttpRequestForm'
+import { SendEmailForm } from '../forms/SendEmailForm'
 
-interface Props {
+interface BaseProps {
   visible: boolean
   scenario: Scenario
-  onActionAdded: () => void
   onCancel: () => void
 }
+interface AddActionProps {
+  onActionAdded: () => void
+}
+
+interface EditActionProps {
+  scenarioAction: ScenarioAction
+  onActionUpdated: (scenarioAction: ScenarioAction) => void
+}
+
+type Props = BaseProps & (AddActionProps | EditActionProps)
 
 interface FailureAction {
-  id: string
+  key: string
   name: string
   logo: string
   form: JSX.Element
 }
 
 export function ScenarioFailureModal (props: Props) {
-  const { visible, scenario, onActionAdded, onCancel } = props
-  const [selectedAction, setSelectedAction] = useState<FailureAction | null>(null)
+  const { visible, scenario, onCancel } = props
+  const initialScenarioAction = (props as EditActionProps)?.scenarioAction ?? null
+  const initialScenarioActionKey = initialScenarioAction?.integrationAction?.key
+  const initialInputs = initialScenarioAction?.inputs ?? {}
+  const isNewAction = !initialScenarioActionKey
+
+  console.log('initialInputs =>', initialInputs)
+
+  const [selectedActionKey, setSelectedActionKey] = useState<string | null>(initialScenarioActionKey)
   const [loading, setLoading] = useState<boolean>(false)
   const [form] = Form.useForm()
 
   useEffect(() => {
-    setSelectedAction(null)
+    setSelectedActionKey(initialScenarioActionKey)
   }, [visible])
 
   const handleFormSubmit = async () => {
     setLoading(true)
     try {
       const inputs = await form.validateFields()
-      await axios.post(`/api/v1/scenarios/${scenario.id}/failure-actions`, {
-        inputs,
-        action: selectedAction.id
-      })
-      onActionAdded()
+      if (isNewAction) {
+        const addActionProps = props as AddActionProps
+        await axios.post(`/api/v1/scenarios/${scenario.id}/failure-actions`, {
+          inputs,
+          action: selectedActionKey
+        })
+        addActionProps.onActionAdded()
+      } else {
+        const editActionProps = props as EditActionProps
+        await axios.patch(`/api/v1/scenarios/${scenario.id}/failure-actions/${editActionProps.scenarioAction.id}`, {
+          ...inputs,
+          name: editActionProps.scenarioAction.name
+        })
+        editActionProps.onActionUpdated({
+          ...editActionProps.scenarioAction,
+          inputs
+        })
+      }
     } catch (e) {
       console.error('ERROR:', e)
       // TODO
@@ -47,7 +77,7 @@ export function ScenarioFailureModal (props: Props) {
   }
 
   const handleActionSelect = (action: FailureAction) => {
-    setSelectedAction(action)
+    setSelectedActionKey(action.key)
   }
 
   const ActionsList = () => {
@@ -98,12 +128,21 @@ export function ScenarioFailureModal (props: Props) {
 
   const actions: FailureAction[] = [
     {
-      id: 'httpRequest',
+      key: 'httpRequest',
       name: 'HTTP Request',
       logo: 'https://flowoid.com/logos/http.svg',
-      form: <HttpRequestForm form={form} onSubmit={handleFormSubmit}/>
+      form: <HttpRequestForm form={form} onSubmit={handleFormSubmit} initialInputs={initialInputs}/>
+    },
+    {
+      key: 'SendEmail',
+      name: 'Send Email',
+      logo: '/images/email.svg',
+      form: <SendEmailForm form={form} onSubmit={handleFormSubmit} initialInputs={initialInputs}/>
     }
   ]
+  const selectedAction = selectedActionKey
+    ? actions.find(action => action.key === selectedActionKey)
+    : null
 
   return (
     <Modal

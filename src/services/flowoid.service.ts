@@ -19,7 +19,7 @@ export const FlowoidService = {
   },
 
   async getIntegrationByKey (key: string) {
-    const integrations = await FlowoidService.listIntegrations({ key: { eq: key } })
+    const integrations = await FlowoidService.listIntegrations({ key: { eq: key }, deprecated: { is: false } })
     if (integrations.length === 1) {
       return integrations[0]
     }
@@ -301,6 +301,7 @@ export const FlowoidService = {
     workflowId: string
     integrationActionId: string
     previousActionId?: string
+    credentials?: string
     inputs: Record<string, any>
   }) {
     const mutation = gql`
@@ -316,6 +317,7 @@ export const FlowoidService = {
           workflow: options.workflowId,
           integrationAction: options.integrationActionId,
           previousAction: options.previousActionId,
+          credentials: options.credentials,
           inputs: options.inputs
         }
       }

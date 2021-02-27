@@ -7,6 +7,7 @@ import { ScenarioModal } from '../scenarios/ScenarioModal'
 import { DeleteScenarioActionModal } from './DeleteScenarioActionModal'
 import { ScenarioActionItem } from './ScenarioActionItem'
 import { ScenarioAssertionsModal } from './ScenarioAssertionsModal'
+import { ScenarioFailureModal } from './ScenarioFailureModal'
 
 interface Props {
   scenario: Scenario
@@ -61,6 +62,9 @@ export function ListScenarioActions (props: Props) {
         )
         avatar = '/images/assertions.svg'
         break
+      case 'SendEmail':
+        avatar = '/images/email.svg'
+        break
     }
 
     return {
@@ -103,6 +107,16 @@ export function ListScenarioActions (props: Props) {
             scenario={scenario}
             scenarioAction={editScenarioAction}
             onUpdate={handleActionUpdateSubmit}
+            onCancel={() => setEditScenarioAction(null)}/>
+        )
+      }
+      {
+        editScenarioAction?.integrationAction.key === 'SendEmail' && (
+          <ScenarioFailureModal
+            visible={true}
+            scenario={scenario}
+            scenarioAction={editScenarioAction}
+            onActionUpdated={handleActionUpdateSubmit}
             onCancel={() => setEditScenarioAction(null)}/>
         )
       }

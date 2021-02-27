@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import striptags from 'striptags'
 import { FlowoidService } from '../../../../../../src/services/flowoid.service'
 import { getQueryParam } from '../../../../../../src/utils/next.utils'
 import { getAuthUsername } from '../../../../../../src/utils/user.utils'
@@ -54,18 +55,54 @@ async function createScenarioFailureAction (req: NextApiRequest, res: NextApiRes
     const previousRunOnFailureActions = runOnFailureWorkflow.actions.edges.map(action => action.node)
 
     let integrationActionId: string
+    let actionInputs: Record<string, any>
     switch (req.body.action) {
       case 'httpRequest':
         const httpIntegration = await FlowoidService.getIntegrationByKey('http')
-        const requestIntegrationAction = await FlowoidService.getIntegrationActionByKey(httpIntegration.id, 'httpRequest')
-        integrationActionId = requestIntegrationAction.id
+        const httpIntegrationAction = await FlowoidService.getIntegrationActionByKey(httpIntegration.id, 'httpRequest')
+        integrationActionId = httpIntegrationAction.id
+        actionInputs = req.body.inputs
+        break
+      case 'sendEmail':
+        const emailIntegration = await FlowoidService.getIntegrationByKey('aws-email')
+        const emailIntegrationAction = await FlowoidService.getIntegrationActionByKey(emailIntegration.id, 'SendEmail')
+        integrationActionId = emailIntegrationAction.id
+        actionInputs = {
+          Destination: {
+            ToAddresses: [req.body.inputs.to]
+            // CcAddresses: [],
+            // BccAddresses: []
+          },
+          FromEmailAddress: 'no-reply@flowoid.com',
+          // ReplyToAddresses: [],
+          Content: {
+            Simple: {
+              Subject: {
+                Charset: 'UTF-8',
+                Data: req.body.inputs.subject
+              },
+              Body: {
+                Text: {
+                  Charset: 'UTF-8',
+                  Data: striptags(req.body.inputs.body)
+                },
+                Html: {
+                  Charset: 'UTF-8',
+                  Data: req.body.inputs.body
+                }
+              }
+            }
+          }
+        }
+        break
     }
 
     await FlowoidService.createWorkflowAction({
       workflowId: runOnFailureWorkflow.id,
       integrationActionId: integrationActionId,
       previousActionId: previousRunOnFailureActions[0]?.id,
-      inputs: req.body.inputs
+      credentials: process.env.FLOWOID_AWS_CREDENTIALS_ID,
+      inputs: actionInputs
     })
 
     res.send({
