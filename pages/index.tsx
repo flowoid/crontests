@@ -8,6 +8,7 @@ import { ScenarioService } from '../src/services/scenario.service'
 import { Scenario } from '../src/typings'
 import { ScenariosTable } from '../components/scenarios/ScenariosTable'
 import { useRouter } from 'next/router'
+import Landing from '../components/landing/generated'
 interface Props {
   username?: string
   scenarios: Scenario[]
@@ -21,7 +22,7 @@ function HomePage (props: Props) {
 
   // TODO show landing page
   if (!username) {
-    return <h1>Hello, Guest!</h1>
+    return <Landing/>
   }
 
   const handleCreateScenarioClick = () => {
