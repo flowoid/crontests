@@ -6,7 +6,6 @@ import 'antd/dist/antd.css'
 import '../styles/vars.css'
 import '../styles/global.css'
 import '../components/landing/Landing.css'
-import PageLayout from '../components/common/PageLayout/PageLayout'
 
 Amplify.configure({
   ...config,
@@ -14,9 +13,5 @@ Amplify.configure({
 })
 
 export default function MyApp ({ Component, pageProps }): JSX.Element {
-  return (
-    <PageLayout>
-      <Component {...pageProps} />
-    </PageLayout>
-  )
+  return <Component {...pageProps} />
 }
