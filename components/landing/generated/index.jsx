@@ -7,16 +7,15 @@ import Nav3 from './Nav3';
 import Banner4 from './Banner4';
 import Feature0 from './Feature0';
 import Pricing2 from './Pricing2';
-import Footer0 from './Footer0';
+import Footer1 from './Footer1';
 
 import {
   Nav30DataSource,
   Banner40DataSource,
   Feature00DataSource,
   Pricing20DataSource,
-  Footer00DataSource,
+  Footer10DataSource,
 } from './data.source';
-// import './less/antMotionStyle.less';
 
 let isMobile;
 enquireScreen((b) => {
@@ -78,10 +77,10 @@ export default class Home extends React.Component {
         dataSource={Pricing20DataSource}
         isMobile={this.state.isMobile}
       />,
-      <Footer0
-        id="Footer0_0"
-        key="Footer0_0"
-        dataSource={Footer00DataSource}
+      <Footer1
+        id="Footer1_0"
+        key="Footer1_0"
+        dataSource={Footer10DataSource}
         isMobile={this.state.isMobile}
       />,
     ];

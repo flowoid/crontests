@@ -4,8 +4,7 @@ export const Nav30DataSource = {
   page: { className: 'home-page' },
   logo: {
     className: 'header3-logo',
-    children:
-      'https://gw.alipayobjects.com/zos/basement_prod/b30cdc2a-d91c-4c78-be9c-7c63b308d4b3.svg',
+    children: 'https://crontests.com/images/logo.svg',
   },
   Menu: {
     className: 'header3-menu',
@@ -31,7 +30,7 @@ export const Nav30DataSource = {
         name: 'item3',
         className: 'header3-item',
         children: {
-          href: '#',
+          href: '/register',
           children: [
             {
               children: (
@@ -71,7 +70,13 @@ export const Banner40DataSource = {
         children: (
           <span>
             <span>
-              <p>Know when things break before your customers do</p>
+              <span>
+                <span>
+                  <span>
+                    <p>Know when things break before your customers do</p>
+                  </span>
+                </span>
+              </span>
             </span>
           </span>
         ),
@@ -79,7 +84,7 @@ export const Banner40DataSource = {
       {
         name: 'button',
         children: {
-          href: '#',
+          href: '/login',
           type: 'primary',
           children: (
             <span>
@@ -186,7 +191,7 @@ export const Feature00DataSource = {
             {
               name: 'image',
               className: 'content0-block-icon',
-              children: '/images/assertions.svg',
+              children: 'https://crontests.com/images/assertions.svg',
             },
             {
               name: 'title',
@@ -230,7 +235,7 @@ export const Feature00DataSource = {
             {
               name: 'image',
               className: 'content0-block-icon',
-              children: '/images/failures.svg',
+              children: 'https://crontests.com/images/failures.svg',
             },
             {
               name: 'title',
@@ -524,15 +529,175 @@ export const Pricing20DataSource = {
     },
   },
 };
-export const Footer00DataSource = {
-  wrapper: { className: 'home-page-wrapper footer0-wrapper' },
-  OverPack: { className: 'home-page footer0', playScale: 0.05 },
+export const Footer10DataSource = {
+  wrapper: { className: 'home-page-wrapper footer1-wrapper' },
+  OverPack: { className: 'footer1', playScale: 0.2 },
+  block: {
+    className: 'home-page',
+    gutter: 0,
+    children: [
+      {
+        name: 'block0',
+        xs: 24,
+        md: 6,
+        className: 'block',
+        title: {
+          className: 'logo',
+          children: 'https://crontests.com/images/logo.svg',
+        },
+        childWrapper: {
+          className: 'slogan',
+          children: [
+            {
+              name: 'content0',
+              children: (
+                <span>
+                  <span>
+                    <span>
+                      <p>
+                        Periodic API testing platform.<br />
+                        <span>
+                          Know when things break before your customers do.
+                        </span>
+                      </p>
+                    </span>
+                  </span>
+                </span>
+              ),
+            },
+          ],
+        },
+      },
+      {
+        name: 'block1',
+        xs: 24,
+        md: 6,
+        className: 'block',
+        title: {
+          children: (
+            <span>
+              <p>Follow Us</p>
+            </span>
+          ),
+        },
+        childWrapper: {
+          children: [
+            {
+              name: 'link0',
+              href: '#',
+              children: (
+                <span>
+                  <p>Twitter</p>
+                </span>
+              ),
+            },
+            {
+              name: 'link1',
+              href: '#',
+              children: (
+                <span>
+                  <p>Facebook</p>
+                </span>
+              ),
+            },
+          ],
+        },
+      },
+      {
+        name: 'block2',
+        xs: 24,
+        md: 6,
+        className: 'block',
+        title: {
+          children: (
+            <span>
+              <p>Information</p>
+            </span>
+          ),
+        },
+        childWrapper: {
+          children: [
+            {
+              href: '/legal/privacy',
+              name: 'link0',
+              children: (
+                <span>
+                  <span>
+                    <span>
+                      <p>Privacy</p>
+                    </span>
+                  </span>
+                </span>
+              ),
+            },
+            {
+              href: '/legal/terms',
+              name: 'link1',
+              children: (
+                <span>
+                  <p>Terms</p>
+                </span>
+              ),
+            },
+          ],
+        },
+      },
+      {
+        name: 'block3',
+        xs: 24,
+        md: 6,
+        className: 'block',
+        title: {
+          children: (
+            <span>
+              <p>Get in touch</p>
+            </span>
+          ),
+        },
+        childWrapper: {
+          children: [
+            {
+              href: '#',
+              name: 'link0',
+              children: (
+                <span>
+                  <p>Feature Requests</p>
+                </span>
+              ),
+            },
+            {
+              href: 'mailto:admin@crontests.com',
+              name: 'link1',
+              children: (
+                <span>
+                  <span>
+                    <span>
+                      <span>
+                        <span>
+                          <span>
+                            <p>Email</p>
+                          </span>
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              ),
+            },
+          ],
+        },
+      },
+    ],
+  },
+  copyrightWrapper: { className: 'copyright-wrapper' },
+  copyrightPage: { className: 'home-page' },
   copyright: {
     className: 'copyright',
     children: (
       <span>
-        ©2018 <a href="https://motion.ant.design">Ant Motion</a> All Rights
-        Reserved
+        <p>
+          CronTests by <a href="https://flowoid.com">Flowoid</a>
+        </p>
       </span>
     ),
   },
