@@ -115,7 +115,7 @@ export default function PageLayout ({ children }: Props) {
 
         <Layout.Footer>
           <div>
-            <a href="mailto:">Contact Us</a> |&nbsp;
+            <a href="mailto:admin@crontests.com">Contact Us</a> |&nbsp;
             <Link href="/legal/terms"><a>Terms</a></Link> | <Link href="/legal/privacy"><a>Privacy</a></Link>
           </div>
         </Layout.Footer>
