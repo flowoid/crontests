@@ -1,6 +1,6 @@
 
 export function getHeadMetatags (
-  { path, title, description, image = '/logo.svg' }: { path: string; title: string; description: string; image?: string }
+  { path, title, description, image = '/logo.svg' }: { path: string, title: string, description: string, image?: string }
 ) {
   const url = process.env.ENDPOINT + path
   let imageUrl = image

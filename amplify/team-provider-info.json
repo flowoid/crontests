@@ -1,0 +1,15 @@
+{
+  "production": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-crontests-production-212910-authRole",
+      "UnauthRoleArn": "arn:aws:iam::592221426603:role/amplify-crontests-production-212910-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::592221426603:role/amplify-crontests-production-212910-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-crontests-production-212910-deployment",
+      "UnauthRoleName": "amplify-crontests-production-212910-unauthRole",
+      "StackName": "amplify-crontests-production-212910",
+      "StackId": "arn:aws:cloudformation:us-east-1:592221426603:stack/amplify-crontests-production-212910/c745ebb0-843a-11eb-ae2f-0a6046b66d41",
+      "AmplifyAppId": "d3nuiu8dvkaqkq"
+    }
+  }
+}
