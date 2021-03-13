@@ -7,6 +7,7 @@ import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint'
 
 import styles from './PageLayout.module.scss'
 import { Auth } from 'aws-amplify'
+import { LandingFooter } from '../../landing/LandingFooter'
 
 interface Props {
   children: JSX.Element
@@ -80,47 +81,42 @@ export default function PageLayout ({ children }: Props) {
   }
 
   return (
-    <Layout hasSider={true} style={{ minHeight: '100vh' }}>
+    <>
+      <Layout hasSider={true} style={{ minHeight: '95vh' }}>
+        <Layout.Sider trigger={null}
+                      collapsible
+                      collapsed={siderCollapsed}
+                      collapsedWidth={hasMobileSider ? 0 : 80}>
 
-      <Layout.Sider trigger={null}
-                    collapsible
-                    collapsed={siderCollapsed}
-                    collapsedWidth={hasMobileSider ? 0 : 80}>
+          { renderLogo() }
 
-        { renderLogo() }
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={[router.pathname]}>
+            <Menu.Item key="/" icon={<ProjectOutlined />}>
+              <Link href='/'>
+                Scenarios
+              </Link>
+            </Menu.Item>
+          </Menu>
+        </Layout.Sider>
 
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={[router.pathname]}>
-          <Menu.Item key="/" icon={<ProjectOutlined />}>
-            <Link href='/'>
-              Scenarios
-            </Link>
-          </Menu.Item>
-        </Menu>
-      </Layout.Sider>
+        <Layout>
 
-      <Layout>
+          <Layout.Header className={styles['layout-header']} style={{ padding: 0 }}>
+            {React.createElement(siderCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+              className: styles['toggle-sider'],
+              onClick: () => setSiderCollapsed(!siderCollapsed)
+            })}
+            <div style={{ flex: '1 1 0%' }}/>
+            { renderHeaderContent() }
+          </Layout.Header>
 
-        <Layout.Header className={styles['layout-header']} style={{ padding: 0 }}>
-          {React.createElement(siderCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-            className: styles['toggle-sider'],
-            onClick: () => setSiderCollapsed(!siderCollapsed)
-          })}
-          <div style={{ flex: '1 1 0%' }}/>
-          { renderHeaderContent() }
-        </Layout.Header>
+          <Layout.Content>
+            {children}
+          </Layout.Content>
 
-        <Layout.Content>
-          {children}
-        </Layout.Content>
-
-        <Layout.Footer>
-          <div>
-            <a href="mailto:admin@crontests.com">Contact Us</a> |&nbsp;
-            <Link href="/legal/terms"><a>Terms</a></Link> | <Link href="/legal/privacy"><a>Privacy</a></Link>
-          </div>
-        </Layout.Footer>
-
+        </Layout>
       </Layout>
-    </Layout>
+      <LandingFooter/>
+    </>
   )
 }
