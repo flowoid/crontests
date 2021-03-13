@@ -1,8 +1,9 @@
-import { AmplifyAuthenticator } from '@aws-amplify/ui-react'
 import React from 'react'
+import { AuthState } from '@aws-amplify/ui-components'
+import { UserAuth } from '../components/users/UserAuth'
 
 function RegisterPage (): JSX.Element {
-  return <AmplifyAuthenticator initialAuthState={'signup' as any}/>
+  return <UserAuth initialAuthState={AuthState.SignUp}/>
 }
 
 export default RegisterPage

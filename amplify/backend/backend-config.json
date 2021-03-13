@@ -1,1 +1,10 @@
-{}
+{
+  "auth": {
+    "crontests8b07e2f4": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

@@ -10,6 +10,11 @@
       "StackName": "amplify-crontests-production-212910",
       "StackId": "arn:aws:cloudformation:us-east-1:592221426603:stack/amplify-crontests-production-212910/c745ebb0-843a-11eb-ae2f-0a6046b66d41",
       "AmplifyAppId": "d3nuiu8dvkaqkq"
+    },
+    "categories": {
+      "auth": {
+        "crontests8b07e2f4": {}
+      }
     }
   }
 }
