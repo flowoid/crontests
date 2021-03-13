@@ -9,6 +9,7 @@ import { Scenario } from '../src/typings'
 import { ScenariosTable } from '../components/scenarios/ScenariosTable'
 import { useRouter } from 'next/router'
 import Landing from '../components/landing/generated'
+import { getHeadMetatags } from '../src/utils/html.utils'
 interface Props {
   username?: string
   scenarios: Scenario[]
@@ -22,7 +23,20 @@ function HomePage (props: Props) {
 
   // TODO show landing page
   if (!username) {
-    return <Landing/>
+    return (
+      <>
+        <Head>
+          {
+            getHeadMetatags({
+              path: '/',
+              title: 'CronTests - Periodic API testing',
+              description: 'Know when things break before your customers do'
+            })
+          }
+        </Head>
+        <Landing/>
+      </>
+    )
   }
 
   const handleCreateScenarioClick = () => {
