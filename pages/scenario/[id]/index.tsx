@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Loading } from '../../../components/common/Loading'
 import { PageWrapper } from '../../../components/common/PageLayout/PageWrapper'
+import { RequestError } from '../../../components/common/RequestError'
 import { ListScenarioActions } from '../../../components/scenario-actions/ListScenarioActions'
 import { ScenarioFailureActions } from '../../../components/scenario-actions/ScenarioFailureActions'
 import { ScenarioRunList } from '../../../components/scenario-runs/ScenarioRunList'
@@ -32,7 +33,7 @@ function ScenarioPage (props: Props) {
   const router = useRouter()
 
   if (!scenario || error) {
-    return <>Unexpected error</> // TODO
+    return <RequestError error={error}/>
   }
 
   const handleScenarioUpdate = async () => {
