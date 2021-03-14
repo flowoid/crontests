@@ -1,6 +1,4 @@
 {
-    "identityPoolName": "crontests8b07e2f4_identitypool_8b07e2f4",
-    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "cronte8b07e2f4",
     "userPoolName": "crontests8b07e2f4_userpool_8b07e2f4",
     "autoVerifiedAttributes": [
@@ -12,8 +10,8 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Your verification code",
-    "emailVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your verification code for CronTests",
+    "emailVerificationMessage": "Your verification code for CronTests is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
@@ -32,7 +30,7 @@
     "userpoolClientSetAttributes": false,
     "sharedId": "8b07e2f4",
     "resourceName": "crontests8b07e2f4",
-    "authSelections": "identityPoolAndUserPool",
+    "authSelections": "userPoolOnly",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -45,7 +43,7 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "manual",
     "triggers": "{}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
@@ -54,5 +52,9 @@
         "Ref": "AWS::StackId"
     },
     "permissions": [],
-    "dependsOn": []
+    "dependsOn": [],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "hostedUI": false,
+    "authProviders": []
 }
