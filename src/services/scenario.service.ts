@@ -2,9 +2,11 @@ import axios from 'axios'
 import { NextApiRequest } from 'next'
 import { Scenario, ScenarioAction, ScenarioRun } from '../typings'
 
+const endpoint = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+
 export const ScenarioService = {
   async listScenarios (req?: NextApiRequest): Promise<Scenario[]> {
-    const res = await axios.get('http://localhost:3000/api/v1/scenarios', {
+    const res = await axios.get(`${endpoint}/api/v1/scenarios`, {
       headers: {
         cookie: req?.headers?.cookie
       }
@@ -16,7 +18,7 @@ export const ScenarioService = {
   },
 
   async getScenarioById (id: string, req?: NextApiRequest): Promise<Scenario | null> {
-    const res = await axios.get(`http://localhost:3000/api/v1/scenarios/${id}`, {
+    const res = await axios.get(`${endpoint}/api/v1/scenarios/${id}`, {
       headers: {
         cookie: req?.headers?.cookie
       }
@@ -31,7 +33,7 @@ export const ScenarioService = {
   },
 
   async patchScenario (id: string, data: Partial<Scenario>, req?: NextApiRequest): Promise<{ id: Scenario['id'] } | null> {
-    const res = await axios.patch(`http://localhost:3000/api/v1/scenarios/${id}`, {
+    const res = await axios.patch(`${endpoint}/api/v1/scenarios/${id}`, {
       method: 'PATCH',
       headers: {
         cookie: req?.headers?.cookie
@@ -48,7 +50,7 @@ export const ScenarioService = {
   },
 
   async deleteScenario (id: string, req?: NextApiRequest): Promise<{ id: Scenario['id'] } | null> {
-    const res = await axios.delete(`http://localhost:3000/api/v1/scenarios/${id}`, {
+    const res = await axios.delete(`${endpoint}/api/v1/scenarios/${id}`, {
       headers: {
         cookie: req?.headers?.cookie
       }
@@ -63,7 +65,7 @@ export const ScenarioService = {
   },
 
   async listScenarioRuns (id: string, req?: NextApiRequest): Promise<ScenarioRun[]> {
-    const res = await axios.get(`http://localhost:3000/api/v1/scenarios/${id}/runs`, {
+    const res = await axios.get(`${endpoint}/api/v1/scenarios/${id}/runs`, {
       headers: {
         cookie: req?.headers?.cookie
       }
@@ -75,7 +77,7 @@ export const ScenarioService = {
   },
 
   async listFailureActions (scenarioId: string, req?: NextApiRequest): Promise<ScenarioAction[]> {
-    const res = await axios.get(`http://localhost:3000/api/v1/scenarios/${scenarioId}/failure-actions`, {
+    const res = await axios.get(`${endpoint}/api/v1/scenarios/${scenarioId}/failure-actions`, {
       headers: {
         cookie: req?.headers?.cookie
       }
@@ -87,7 +89,7 @@ export const ScenarioService = {
   },
 
   async deleteFailureAction (acscenarioId: string, actionId: string, req?: NextApiRequest): Promise<ScenarioAction[]> {
-    const res = await axios.delete(`http://localhost:3000/api/v1/scenarios/${acscenarioId}/failure-actions/${actionId}`, {
+    const res = await axios.delete(`${endpoint}/api/v1/scenarios/${acscenarioId}/failure-actions/${actionId}`, {
       headers: {
         cookie: req?.headers?.cookie
       }
@@ -97,5 +99,4 @@ export const ScenarioService = {
     }
     throw new Error() // TODO
   }
-
 }
