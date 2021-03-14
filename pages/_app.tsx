@@ -1,5 +1,6 @@
 import React from 'react'
-import Amplify, { Auth } from 'aws-amplify'
+import Amplify from '@aws-amplify/core'
+import { Auth } from 'aws-amplify'
 import awsconfig from '../src/aws-exports'
 
 import 'antd/dist/antd.css'
