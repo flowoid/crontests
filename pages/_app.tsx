@@ -1,6 +1,6 @@
 import React from 'react'
 import Amplify from 'aws-amplify'
-import config from '../aws-exports'
+import config from '../src/aws-exports'
 
 import 'antd/dist/antd.css'
 import '../styles/vars.css'
