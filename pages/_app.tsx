@@ -9,7 +9,7 @@ import '../styles/global.css'
 import '../components/landing/Landing.css'
 
 // Amplify configuration
-const authConfig = { ...awsconfig, ssr: true }
+const authConfig = { ...awsconfig, ssr: true, Auth: awsconfig }
 Amplify.configure(authConfig)
 Auth.configure(authConfig)
 
