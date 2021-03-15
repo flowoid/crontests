@@ -1,0 +1,37 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-crontests-production-212910-authRole",
+      "UnauthRoleArn": "arn:aws:iam::592221426603:role/amplify-crontests-production-212910-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::592221426603:role/amplify-crontests-production-212910-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-crontests-production-212910-deployment",
+      "UnauthRoleName": "amplify-crontests-production-212910-unauthRole",
+      "StackName": "amplify-crontests-production-212910",
+      "StackId": "arn:aws:cloudformation:us-east-1:592221426603:stack/amplify-crontests-production-212910/c745ebb0-843a-11eb-ae2f-0a6046b66d41",
+      "AmplifyAppId": "d3nuiu8dvkaqkq"
+    }
+  },
+  "auth": {
+    "crontestsb8cec0f3": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-crontests-production-212910-deployment/amplify-cfn-templates/auth/crontestsb8cec0f3-cloudformation-template.yml",
+        "logicalId": "authcrontestsb8cec0f3"
+      },
+      "lastPushTimeStamp": "2021-03-14T22:36:44.314Z",
+      "output": {
+        "UserPoolId": "us-east-1_a1PgoxdjY",
+        "AppClientIDWeb": "305sbenpeoffoip7adn1m4lm7r",
+        "AppClientID": "1ooh69ud3e4gupot95roi70jd4",
+        "IdentityPoolId": "us-east-1:40c41416-10a4-44e4-a48d-3d5d493bdc97",
+        "IdentityPoolName": "crontestsb8cec0f3_identitypool_b8cec0f3__production",
+        "UserPoolName": "crontestsb8cec0f3_userpool_b8cec0f3"
+      },
+      "lastPushDirHash": "cn/HLPZO6hch099CX/4Lj/HP1zg="
+    }
+  }
+}

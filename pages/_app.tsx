@@ -1,5 +1,5 @@
 import React from 'react'
-import Amplify, { Auth } from 'aws-amplify'
+import Amplify from 'aws-amplify'
 import awsconfig from '../src/aws-exports'
 
 import 'antd/dist/antd.css'
@@ -7,10 +7,7 @@ import '../styles/vars.css'
 import '../styles/global.css'
 import '../components/landing/Landing.css'
 
-// Amplify configuration
-const authConfig = { ...awsconfig, ssr: true }
-Amplify.configure(authConfig)
-Auth.configure(authConfig)
+Amplify.configure({ ...awsconfig, ssr: true })
 
 export default function MyApp ({ Component, pageProps }): JSX.Element {
   return <Component {...pageProps} />

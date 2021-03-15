@@ -1,8 +1,12 @@
+import Amplify from 'aws-amplify'
 import { NextApiRequest, NextApiResponse } from 'next'
 import striptags from 'striptags'
+import awsconfig from '../../../../../../src/aws-exports'
 import { FlowoidService } from '../../../../../../src/services/flowoid.service'
 import { getQueryParam } from '../../../../../../src/utils/next.utils'
 import { getAuthUsername } from '../../../../../../src/utils/user.utils'
+
+Amplify.configure({ ...awsconfig, ssr: true })
 
 export default function (req: NextApiRequest, res: NextApiResponse): Promise<void> {
   switch (req.method) {
