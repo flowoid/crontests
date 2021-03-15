@@ -7,3 +7,7 @@ export const getQueryParam = (ctx: NextPageContext | NextApiRequest, key: string
   }
   return value ?? ''
 }
+
+export const isBrowser = typeof window !== 'undefined' && window.document && window.document.createElement
+
+export const isServer = !isBrowser

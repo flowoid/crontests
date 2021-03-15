@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { NextApiRequest } from 'next'
 import { Scenario, ScenarioAction, ScenarioRun } from '../typings'
+import { isServer } from '../utils/next.utils'
 
-const endpoint = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+const endpoint = isServer
+  ? `${process.env.PROTOCOL ?? 'https'}://${process.env.VERCEL_URL ?? 'localhost:3000'}`
+  : ''
 
 export const ScenarioService = {
   async listScenarios (req?: NextApiRequest): Promise<Scenario[]> {
