@@ -48,10 +48,10 @@ export const Nav30DataSource = {
   mobileMenu: { className: 'header3-mobile-menu' },
 };
 export const Banner40DataSource = {
-  wrapper: { className: 'home-page-wrapper banner4' },
+  wrapper: { className: 'home-page-wrapper banner4 kmaoxn4d06c-editor_css' },
   page: { className: 'home-page banner4-page' },
   childWrapper: {
-    className: 'banner4-title-wrapper',
+    className: 'banner4-title-wrapper kmaouyf94h-editor_css',
     children: [
       {
         name: 'title',
@@ -70,13 +70,7 @@ export const Banner40DataSource = {
         children: (
           <span>
             <span>
-              <span>
-                <span>
-                  <span>
-                    <p>Know when things break before your customers do</p>
-                  </span>
-                </span>
-              </span>
+              <p>Know when things break before your customers do</p>
             </span>
           </span>
         ),
@@ -84,7 +78,7 @@ export const Banner40DataSource = {
       {
         name: 'button',
         children: {
-          href: '/login',
+          href: '#',
           type: 'primary',
           children: (
             <span>
@@ -111,7 +105,7 @@ export const Banner40DataSource = {
     ],
   },
   image: {
-    className: 'banner4-image',
+    className: 'banner4-image kmaovlk51bh-editor_css',
     children: 'https://crontests.s3.amazonaws.com/images/app.png',
   },
 };
@@ -554,12 +548,14 @@ export const Footer10DataSource = {
                 <span>
                   <span>
                     <span>
-                      <p>
-                        Periodic API testing platform.<br />
-                        <span>
-                          Know when things break before your customers do.
-                        </span>
-                      </p>
+                      <span>
+                        <p>
+                          Periodic API testing platform.<br />
+                          <span>
+                            Know when things break before your customers do.
+                          </span>
+                        </p>
+                      </span>
                     </span>
                   </span>
                 </span>
@@ -587,7 +583,11 @@ export const Footer10DataSource = {
               href: '#',
               children: (
                 <span>
-                  <p>Twitter</p>
+                  <span>
+                    <span>
+                      <p>Twitter</p>
+                    </span>
+                  </span>
                 </span>
               ),
             },
@@ -622,11 +622,7 @@ export const Footer10DataSource = {
               name: 'link0',
               children: (
                 <span>
-                  <span>
-                    <span>
-                      <p>Privacy</p>
-                    </span>
-                  </span>
+                  <p>Privacy</p>
                 </span>
               ),
             },
@@ -657,7 +653,7 @@ export const Footer10DataSource = {
         childWrapper: {
           children: [
             {
-              href: '#',
+              href: 'https://github.com/flowoid/crontests/issues',
               name: 'link0',
               children: (
                 <span>
@@ -670,17 +666,7 @@ export const Footer10DataSource = {
               name: 'link1',
               children: (
                 <span>
-                  <span>
-                    <span>
-                      <span>
-                        <span>
-                          <span>
-                            <p>Email</p>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
+                  <p>Email</p>
                 </span>
               ),
             },
@@ -695,9 +681,8 @@ export const Footer10DataSource = {
     className: 'copyright',
     children: (
       <span>
-        <p>
-          CronTests by <a href="https://flowoid.com">Flowoid</a>
-        </p>
+        CronTests by <a href="https://flowoid.com">Flowoid</a>
+        <br />
       </span>
     ),
   },
