@@ -18,6 +18,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Cookie consent */
+.cc-window {
+  z-index: 10000000;
+}
+
 .text-left {
   text-align: left !important;
 }
