@@ -47,7 +47,7 @@ export default function PageLayout ({ children }: Props) {
     }
     return (
       <Link href='/'>
-        <a><img src="/logo.svg" style={style} /></a>
+        <a><img src="/images/logo.svg" style={style} /></a>
       </Link>
     )
   }
