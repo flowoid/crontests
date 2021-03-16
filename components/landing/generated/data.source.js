@@ -87,7 +87,7 @@ export const Banner40DataSource = {
       {
         name: 'button',
         children: {
-          href: '#',
+          href: '/register',
           type: 'primary',
           children: (
             <span>
@@ -589,7 +589,7 @@ export const Footer10DataSource = {
           children: [
             {
               name: 'link0',
-              href: '#',
+              href: 'https://twitter.com/crontests',
               children: (
                 <span>
                   <span>
@@ -602,7 +602,7 @@ export const Footer10DataSource = {
             },
             {
               name: 'link1',
-              href: '#',
+              href: 'https://www.facebook.com/crontests',
               children: (
                 <span>
                   <p>Facebook</p>
