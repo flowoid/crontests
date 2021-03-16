@@ -70,7 +70,16 @@ export const Banner40DataSource = {
         children: (
           <span>
             <span>
-              <p>Know when things break before your customers do</p>
+              <span>
+                <span>
+                  <span>
+                    <p>
+                      Know when things break before your customers do. No code
+                      is needed.
+                    </p>
+                  </span>
+                </span>
+              </span>
             </span>
           </span>
         ),

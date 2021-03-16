@@ -138,6 +138,24 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6 {
   top: 0px;
   bottom: 0px;
 }
+@media screen and (max-width: 767px) {
+  #Banner4_0 .home-page > .kmaouyf94h-editor_css {
+    margin: 96px 0px 64px;
+    padding: 0 0 64px;
+ }
+}
+@media screen and (max-width: 767px) {
+  #Banner4_0.kmaoxn4d06c-editor_css {
+    height: 550px;
+    padding: 0px 0px;
+ }
+}
+@media screen and (max-width: 767px) {
+  #Banner4_0 .home-page > .kmaovlk51bh-editor_css {
+    display: none;
+    margin: 64px auto auto;
+ }
+}
 
 /* feature0.less */
 .content0-wrapper {
