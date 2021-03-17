@@ -2,6 +2,7 @@ import React from 'react'
 import Amplify from 'aws-amplify'
 import awsconfig from '../src/aws-exports'
 import CookieConsent from '../components/common/CookieConsent'
+import GoogleAnalytics from '../components/common/GoogleAnalytics'
 
 import 'antd/dist/antd.css'
 import '../styles/vars.css'
@@ -13,6 +14,7 @@ Amplify.configure({ ...awsconfig, ssr: true })
 export default function MyApp ({ Component, pageProps }): JSX.Element {
   return (
     <>
+      <GoogleAnalytics/>
       <CookieConsent/>
       <Component {...pageProps} />
     </>
